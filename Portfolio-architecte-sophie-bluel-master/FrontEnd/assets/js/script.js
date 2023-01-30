@@ -48,8 +48,6 @@ const generateWorks = async function (workId) {
     return works;
 }
 
-
-
 //MAIN CALLS
 const works = generateWorks();
 //.then(works => console.log('works: ' + JSON.stringify(works)))
