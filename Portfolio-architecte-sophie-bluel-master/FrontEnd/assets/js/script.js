@@ -4,13 +4,13 @@ const fetchWorks = async function (workId) {
     if (workId > 0) {
         // worksList.filter(work => work.category.id === workId);
         // const worksListFiltered = worksList.filter(work => work.categoryId === workId);
-        console.log('worksList: ' + JSON.stringify(worksList));
-        console.log('Id :' + workId);
+        // console.log('worksList: ' + JSON.stringify(worksList));
+        // console.log('Id :' + workId);
         return worksList.filter(work => work.categoryId === workId);
     }
     else {
         // worksListFiltered = worksList;
-        console.log('nothing changed from the original list')
+        // console.log('nothing changed from the original list')
         return worksList;
     }
 
@@ -34,16 +34,16 @@ const generateWork = function (work) {
 
 const generateWorks = async function (workId) {
     const works = await fetchWorks(workId);
-    console.log('works: ');
-    console.log(works);
+    // console.log('works: ');
+    // console.log(works);
     document.querySelector('.gallery').innerHTML = '';
 
     for (let work of works) {
         generateWork(work);
-        console.log('work: ' + JSON.stringify(work.categoryId));
+        // console.log('work: ' + JSON.stringify(work.categoryId));
     }
 
-    console.log('works:ldsklsdkj ' + JSON.stringify(works));
+    // console.log('works: ' + JSON.stringify(works));
 
     return works;
 }
@@ -55,11 +55,11 @@ const works = generateWorks();
 
 const filtersInput = document.querySelectorAll('.filter input');
 
-console.log('filters: ' + JSON.stringify(filtersInput));
+// console.log('filters: ' + JSON.stringify(filtersInput));
 
 for (let filter of filtersInput) {
     filter.addEventListener('change', function (event) {
-        console.log('filter: ' + event.target.id);
+        // console.log('filter: ' + event.target.id);
         switch (event.target.id) {
             case 'radio0': generateWorks(0); break;
             case 'radio1': generateWorks(1); break;
