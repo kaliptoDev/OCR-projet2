@@ -13,7 +13,7 @@ const fetchWorks = async function (workId) {
         console.log('nothing changed from the original list')
         return worksList;
     }
-    
+
 }
 
 const generateWork = function (work) {
@@ -42,7 +42,7 @@ const generateWorks = async function (workId) {
         generateWork(work);
         console.log('work: ' + JSON.stringify(work.categoryId));
     }
-    
+
     console.log('works:ldsklsdkj ' + JSON.stringify(works));
 
     return works;
@@ -51,10 +51,10 @@ const generateWorks = async function (workId) {
 
 
 //MAIN CALLS
-const works = generateWorks(); 
+const works = generateWorks();
 //.then(works => console.log('works: ' + JSON.stringify(works)))
-
 // const filters = document.querySelectorAll('.filter');
+
 const filtersInput = document.querySelectorAll('.filter input');
 
 console.log('filters: ' + JSON.stringify(filtersInput));
