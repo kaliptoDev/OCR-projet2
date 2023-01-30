@@ -7,7 +7,6 @@ const fetchWorks = async function () {
 const generateWork = function (work) {
     const workElement = document.createElement('figure');
     workElement.setAttribute('id', 'work_' + work.id);
-    // const workElementFigure = document.getElementById('work_' + work.id);
     const workElementFigureImg = document.createElement("img");
     workElementFigureImg.src = work.imageUrl;
     workElementFigureImg.crossOrigin = "anonymous";
@@ -34,5 +33,3 @@ const generateWorks = async function () {
 
 //MAIN CALLS
 const works = generateWorks().then(works => console.log('works: ' + JSON.stringify(works)));
-
-// console.log('works: ' + works);
