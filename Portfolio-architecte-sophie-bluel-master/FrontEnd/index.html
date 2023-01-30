@@ -10,7 +10,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
-	<script src="assets/js/script.js"></script>
+	<script src="assets/js/script.js" defer></script>
 </head>
 
 <body>
@@ -45,8 +45,23 @@
 			<h2>Mes Projets</h2>
 			<div class="filters">
 				<div class="filter">
-					<input type="checkbox" id="checkbox1" name="checkbox1" class="checkboxes">
-					<label for="checkbox1" class="filter_label">Appartement</label>
+					<input type="radio" id="radio0" name="filter" value="all" class="checkboxes" checked>
+					<label for="radio0" class="filter_label">Tous</label>
+				</div>
+
+				<div class="filter">
+					<input type="radio" id="radio1" name="filter" value="objects" class="checkboxes" >
+					<label for="radio1" class="filter_label">Objets</label>
+				</div>
+
+				<div class="filter">
+					<input type="radio" id="radio2" name="filter" value="appartments" class="checkboxes">
+					<label for="radio2" class="filter_label">Appartements</label>
+				</div>
+
+				<div class="filter">
+					<input type="radio" id="radio3" name="filter" value="hotels_restaurants" class="checkboxes">
+					<label for="radio3" class="filter_label">Hôtels & restaurants</label>
 				</div>
 			</div>
 				<div class="gallery">

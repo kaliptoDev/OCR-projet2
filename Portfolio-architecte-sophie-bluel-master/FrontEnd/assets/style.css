@@ -138,12 +138,14 @@ li:hover {
 	justify-content: center;
 	margin-bottom: 1em;
 	margin: 20px 0 50px 0;
-	/* height: 37px; */
-	/* border-color: #1D6154; */
 }
 
 .checkboxes{
 	display: none;
+}
+
+.filter{
+	margin:5px;
 }
 
 .filter_label{
@@ -151,6 +153,22 @@ li:hover {
 	color: #1D6154;
 	border: 1px solid #1D6154;
 	border-radius: 20px;
+	transition: ease-in 0.1s;
+	font-family: 'Syne';
+	font-style: normal;
+	font-weight: 700;
+	font-size:16px;
+	line-height: 19px;
+}
+
+.filter_label:hover{
+	background-color: #1D6154;
+	color: white;
+}
+
+.checkboxes:checked+label{
+	background-color: #1D6154;
+	color: white;
 }
 
 .gallery {
