@@ -29,10 +29,6 @@ const generateWorks = async function () {
     for (let work of works) {
         const workElement = generateWork(work);
     }
-
-
-
-
     return works;
 }
 
