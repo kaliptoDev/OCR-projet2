@@ -126,19 +126,26 @@
 			</form>
 		</section>
 
+		<!-- {
+			"email": "sophie.bluel@test.tld",
+			"password": "S0phie."
+		  } -->
+		  <!-- http://localhost:5678/api/users/login -->
+		  <!-- action="triggerLoginSubmit(email,password)" -->
+
 		<section id="login">
 			<h2 class="login_h2">Log in</h2>
-			<form action="#" method="post">
+			<form action="javascript:triggerLoginSubmit()" method="post">
 				<div>
-					<label for="login">E-mail</label>
-					<input type="text" name="login" id="login_input">
+					<label for="email">E-mail</label>
+					<input type="text" name="email" id="email_input">
 				</div>
 				<div>
 					<label for="password">Mot de passe</label>
 					<input type="password" name="password" id="password_input">
 				</div>
 				<!-- <label for="submit" class="login_submit">Se connecter</label> -->
-				<input type="submit" value="Se connecter">
+				<input type="submit" value="Se connecter" id="loginSubmit" >
 			</form>
 			<span>
 				<a href="#">Mot de passe oublié</a>

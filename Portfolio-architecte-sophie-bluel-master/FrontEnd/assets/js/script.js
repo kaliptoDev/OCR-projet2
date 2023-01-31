@@ -32,16 +32,16 @@ const generateWorks = async function (workId) {
 
     for (let work of works) {
         generateWork(work);
-     }
+    }
 
     return works;
 }
 
 const triggers = function () {
-    triggerContact();
+    triggerNavContact();
     triggerFilter();
-    triggerLogin();
-    triggerWork();
+    triggerNavLogin();
+    triggerNavWork();
 }
 
 const triggerFilter = function () {
@@ -61,38 +61,38 @@ const triggerFilter = function () {
 
 }
 
-const triggerContact = function () {
+const triggerNavContact = function () {
     const contactTrigger = document.querySelector('.contact');
-    contactTrigger.addEventListener('click', function (event) {
+    contactTrigger.addEventListener('click', function () {
         console.log('contact');
         document.querySelector('.worksGallery').style.fontWeight = '400';
         document.querySelector('.login').style.fontWeight = '400';
         document.querySelector('.contact').style.fontWeight = '600';
         showWorks();
-        document.querySelector('#contact').scrollIntoView({behavior: 'smooth'}, true);
+        document.querySelector('#contact').scrollIntoView({ behavior: 'smooth' }, true);
         document.querySelector('#login').style.display = 'none';
     });
 
 
 }
 
-const triggerWork = function () {
+const triggerNavWork = function () {
     const backToWorks = document.querySelector('.worksGallery');
-    backToWorks.addEventListener('click', function (event) {
+    backToWorks.addEventListener('click', function () {
         console.log('works');
         document.querySelector('.worksGallery').style.fontWeight = '600';
         document.querySelector('.login').style.fontWeight = '400';
         document.querySelector('.contact').style.fontWeight = '400';
         document.querySelector('#login').style.display = 'none';
         showWorks();
-        
+
     });
 
 }
 
-const triggerLogin = function () {
+const triggerNavLogin = function () {
     const loginTrigger = document.querySelector('.login');
-    loginTrigger.addEventListener('click', function (event) {
+    loginTrigger.addEventListener('click', function () {
         console.log('login');
         hideZone('#introduction');
         hideZone('#portfolio');
@@ -103,6 +103,26 @@ const triggerLogin = function () {
         document.querySelector('#login').style.display = 'flex';
     });
 
+}
+
+const triggerLoginSubmit = function () {
+    // const loginSubmit = document.querySelector('#loginSubmit');
+    const email = document.querySelector('#email_input').value;
+    document.querySelector('#email_input').value = '';
+    const password = document.querySelector('#password_input').value;
+    document.querySelector('#password_input').value = '';
+
+    console.log(email + ' ' + password);
+    console.log('works');
+    
+    document.querySelector('.worksGallery').style.fontWeight = '600';
+    document.querySelector('.login').style.fontWeight = '400';
+    document.querySelector('.contact').style.fontWeight = '400';
+    document.querySelector('#login').style.display = 'none';
+    document.querySelector('.login').innerText = 'logout';
+    showWorks();
+
+    
 }
 
 const showWorks = function () {

@@ -327,6 +327,11 @@ li:hover {
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	transition: ease-in 0.1s;
+}
+
+#contact input[type="submit"]:hover{
+	background-color: #0E2F28;
 }
 
 #contact label {
@@ -400,6 +405,11 @@ input[type="submit"] {
 	font-weight: 700;
 	font-size: 14px;
 	line-height: 17px;
+	transition: ease-in 0.1s;
+}
+
+#login input[type="submit"]:hover{
+	background-color: #0E2F28;
 }
 
 #login span a{
