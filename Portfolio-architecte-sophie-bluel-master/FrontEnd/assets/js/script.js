@@ -48,14 +48,12 @@ const triggerFilter = function () {
     const filtersInput = document.querySelectorAll('.filter input');
     for (let filter of filtersInput) {
         filter.addEventListener('change', function (event) {
-            // console.log('filter: ' + event.target.id);
             switch (event.target.id) {
                 case 'radio0': generateWorks(0); break;
                 case 'radio1': generateWorks(1); break;
                 case 'radio2': generateWorks(2); break;
                 case 'radio3': generateWorks(3); break;
             }
-            // generateWorks();
         });
     }
 
