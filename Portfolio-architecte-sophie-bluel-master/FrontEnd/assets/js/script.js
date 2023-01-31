@@ -70,6 +70,7 @@ const triggerContact = function () {
         document.querySelector('.contact').style.fontWeight = '600';
         showWorks();
         document.querySelector('#contact').scrollIntoView({behavior: 'smooth'}, true);
+        document.querySelector('#login').style.display = 'none';
     });
 
 
@@ -82,7 +83,9 @@ const triggerWork = function () {
         document.querySelector('.worksGallery').style.fontWeight = '600';
         document.querySelector('.login').style.fontWeight = '400';
         document.querySelector('.contact').style.fontWeight = '400';
+        document.querySelector('#login').style.display = 'none';
         showWorks();
+        
     });
 
 }
@@ -97,6 +100,7 @@ const triggerLogin = function () {
         document.querySelector('.worksGallery').style.fontWeight = '400';
         document.querySelector('.login').style.fontWeight = '600';
         document.querySelector('.contact').style.fontWeight = '400';
+        document.querySelector('#login').style.display = 'flex';
     });
 
 }
