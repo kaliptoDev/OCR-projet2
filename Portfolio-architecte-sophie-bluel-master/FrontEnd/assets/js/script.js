@@ -105,8 +105,19 @@ const triggerNavLogin = function () {
 
 }
 
-const triggerLoginSubmit = function () {
-    // const loginSubmit = document.querySelector('#loginSubmit');
+const createUserJson = function (email, password) {
+
+    const user = {
+        email: email,
+        password: password
+    }
+
+    return user;
+
+}
+
+const triggerLoginSubmit = async function () {
+
     const email = document.querySelector('#email_input').value;
     document.querySelector('#email_input').value = '';
     const password = document.querySelector('#password_input').value;
@@ -114,15 +125,39 @@ const triggerLoginSubmit = function () {
 
     console.log(email + ' ' + password);
     console.log('works');
-    
-    document.querySelector('.worksGallery').style.fontWeight = '600';
-    document.querySelector('.login').style.fontWeight = '400';
-    document.querySelector('.contact').style.fontWeight = '400';
-    document.querySelector('#login').style.display = 'none';
-    document.querySelector('.login').innerText = 'logout';
-    showWorks();
 
-    
+    if (email === '' || password === '') {
+        alert('Veuillez remplir tous les champs');
+    } else {
+        fetch('http://localhost:5678/api/users/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(createUserJson(email, password))
+        }).then(response => {
+            response.json;
+            if (response.status === 404) {
+                alert('Erreur dans l’identifiant ou le mot de passe');
+            } else if (response.status === 401) {
+                alert('Erreur dans l’identifiant ou le mot de passe');
+            } else if (response.status === 200) {
+                document.querySelector('.worksGallery').style.fontWeight = '600';
+                document.querySelector('.login').style.fontWeight = '400';
+                document.querySelector('.contact').style.fontWeight = '400';
+                document.querySelector('#login').style.display = 'none';
+                document.querySelector('.login').innerText = 'logout';
+                showWorks();
+                console.log('connection validated')
+            } else {
+                alert('Probleme' + response.status);
+            }
+        }).then(response => {
+            console.log('fetch finished')
+        });
+    }
+
+
 }
 
 const showWorks = function () {
