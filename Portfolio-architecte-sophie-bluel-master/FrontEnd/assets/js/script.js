@@ -114,7 +114,7 @@ const createUserJson = function (email, password) {
 
 }
 
-const triggerLoginSubmit = async function () {
+const triggeredLoginSubmit = function () {
 
     const email = document.querySelector('#email_input').value;
     document.querySelector('#email_input').value = '';
@@ -134,7 +134,7 @@ const triggerLoginSubmit = async function () {
             },
             body: JSON.stringify(createUserJson(email, password))
         }).then(response => {
-            response.json;
+
             if (response.status === 404) {
                 alert('Erreur dans l’identifiant ou le mot de passe');
             } else if (response.status === 401) {
@@ -146,17 +146,54 @@ const triggerLoginSubmit = async function () {
                 document.querySelector('#login').style.display = 'none';
                 document.querySelector('.login').innerText = 'logout';
                 showWorks();
-                console.log('connection validated')
+                console.log('connection validated');
+                // JSON.stringify(response)
+                // console.log(response);
+                return response.json();
             } else {
                 alert('Probleme' + response.status);
             }
         }).then(response => {
-            console.log('fetch finished')
+            console.log(response)
+            console.log(response.token)
+            createCookie(response.token, response.userId);
+            return response;
         });
     }
-
-
 }
+
+const createCookie = function (token, userId) {
+    // document.cookie = "token=" + token;
+    // document.cookie = "userId=" + userId;
+    console.log("cookie created for user " + userId);
+
+    // data = {
+    //     token: token,
+    //     userId: userId
+    // };
+
+    var data = '{'
+        + '"token" : token,'
+        + '"userId"  : userId'
+        + '}';
+
+    const d = new Date();
+    d.setTime(d.getTime() - d.getTimezoneOffset() + (30 * 60 * 1000)); //30 minutes format: min
+    let expires = "expires=" + d.toUTCString();
+    document.cookie = "Authorization" + "=" + data + ";" + expires + ";path=/";
+    console.log(d.getTimezoneOffset());
+}
+
+const getCookie = function () {
+    let cookie = document.cookie;
+
+    cookieList = cookie.split(';');
+
+    console.log(cookieList);
+    return cookie;
+}
+
+const triggeredLogoutSubmit = function () { }
 
 const showWorks = function () {
     document.querySelector('#portfolio').style.display = 'flex';
@@ -170,3 +207,4 @@ const hideZone = function (zone) {
 //MAIN CALLS
 const works = generateWorks();
 triggers();
+console.log('cookie : ' + getCookie());
