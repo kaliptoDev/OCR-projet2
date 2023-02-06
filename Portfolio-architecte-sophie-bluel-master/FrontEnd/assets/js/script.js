@@ -15,7 +15,6 @@ const fetchWorks = async (workId) => {
 }
 
 
-
 const generateWork = (work) => {
     const workElement = document.createElement('figure');
     const workElementFigureImg = document.createElement("img");
