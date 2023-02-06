@@ -1,31 +1,39 @@
-const fetchWorks = async function (workId) {
-    const res = await fetch('http://localhost:5678/api/works', { method: 'GET' });
-    const worksList = await res.json();
+import { setStorage, getStorage, createUserJson, fetchAPI } from './utils.js'
+
+// fetchAPI /\
+
+const fetchWorks = async (workId) => {
+    const worksList = await fetchAPI('http://localhost:5678/api/works', 'GET');
+    if (!worksList) alert('Erreur lors du chargement des oeuvres');
+
     if (workId > 0) {
         return worksList.filter(work => work.categoryId === workId);
     }
     else {
         return worksList;
     }
-
 }
 
-const generateWork = function (work) {
+
+
+const generateWork = (work) => {
     const workElement = document.createElement('figure');
-    workElement.setAttribute('id', 'work_' + work.id);
     const workElementFigureImg = document.createElement("img");
+    const captionWork = document.createElement("figcaption");
+
+    workElement.setAttribute('id', `work_${work.id}`);
     workElementFigureImg.src = work.imageUrl;
     workElementFigureImg.crossOrigin = "anonymous";
     workElementFigureImg.setAttribute('alt', work.title);
-    const captionWork = document.createElement("figcaption");
     captionWork.innerText = work.title;
+
     document.querySelector('.gallery').appendChild(workElement);
     document.getElementById('work_' + work.id).appendChild(workElementFigureImg);
     document.getElementById('work_' + work.id).appendChild(captionWork);
 
 }
 
-const generateWorks = async function (workId) {
+const generateWorks = async (workId) => {
     const works = await fetchWorks(workId);
 
     document.querySelector('.gallery').innerHTML = '';
@@ -37,84 +45,71 @@ const generateWorks = async function (workId) {
     return works;
 }
 
-const triggers = function () {
+const navUpdate = (parameter1, parameter2, parameter3, parameter4, worksBoolean) => {
+    document.querySelector('.worksGallery').style.fontWeight = parameter1;
+    document.querySelector('.login').style.fontWeight = parameter2;
+    document.querySelector('.contact').style.fontWeight = parameter3;
+    if (worksBoolean) { showWorks(); }
+    document.querySelector('#login').style.display = parameter4;
+}
+
+const triggers = () => {
     triggerNavContact();
     triggerFilter();
     triggerNavLogin();
     triggerNavWork();
+    triggerLogin();
 }
 
-const triggerFilter = function () {
+const triggerFilter = () => {
     const filtersInput = document.querySelectorAll('.filter input');
     for (let filter of filtersInput) {
-        filter.addEventListener('change', function (event) {
-            switch (event.target.id) {
-                case 'radio0': generateWorks(0); break;
-                case 'radio1': generateWorks(1); break;
-                case 'radio2': generateWorks(2); break;
-                case 'radio3': generateWorks(3); break;
-            }
+        filter.addEventListener('change', (event) => {
+            generateWorks(parseInt(event.target.id.slice(5)))
         });
     }
 
 }
 
-const triggerNavContact = function () {
+const triggerNavContact = () => {
     const contactTrigger = document.querySelector('.contact');
     contactTrigger.addEventListener('click', function () {
         console.log('contact');
-        document.querySelector('.worksGallery').style.fontWeight = '400';
-        document.querySelector('.login').style.fontWeight = '400';
-        document.querySelector('.contact').style.fontWeight = '600';
-        showWorks();
+        navUpdate('400', '400', '600', 'none', true)
         document.querySelector('#contact').scrollIntoView({ behavior: 'smooth' }, true);
-        document.querySelector('#login').style.display = 'none';
     });
 
 
 }
 
-const triggerNavWork = function () {
+const triggerNavWork = () => {
     const backToWorks = document.querySelector('.worksGallery');
-    backToWorks.addEventListener('click', function () {
+    backToWorks.addEventListener('click', () => {
         console.log('works');
-        document.querySelector('.worksGallery').style.fontWeight = '600';
-        document.querySelector('.login').style.fontWeight = '400';
-        document.querySelector('.contact').style.fontWeight = '400';
-        document.querySelector('#login').style.display = 'none';
-        showWorks();
-
+        navUpdate('600', '400', '400', 'none', true)
     });
 
 }
 
-const triggerNavLogin = function () {
+const triggerNavLogin = () => {
     const loginTrigger = document.querySelector('.login');
     loginTrigger.addEventListener('click', function () {
         console.log('login');
         hideZone('#introduction');
         hideZone('#portfolio');
         hideZone('#contact');
-        document.querySelector('.worksGallery').style.fontWeight = '400';
-        document.querySelector('.login').style.fontWeight = '600';
-        document.querySelector('.contact').style.fontWeight = '400';
-        document.querySelector('#login').style.display = 'flex';
+        navUpdate('400', '600', '400', 'flex', false)
     });
 
 }
 
-const createUserJson = function (email, password) {
-
-    const user = {
-        email: email,
-        password: password
-    }
-
-    return user;
-
+const triggerLogin = () => {
+    const loginSubmit = document.querySelector('#loginSubmit');
+    loginSubmit.addEventListener('click', triggeredLoginSubmit);
 }
 
-const triggeredLoginSubmit = function () {
+
+const triggeredLoginSubmit = async () => {
 
     const email = document.querySelector('#email_input').value;
     document.querySelector('#email_input').value = '';
@@ -127,84 +122,34 @@ const triggeredLoginSubmit = function () {
     if (email === '' || password === '') {
         alert('Veuillez remplir tous les champs');
     } else {
-        fetch('http://localhost:5678/api/users/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(createUserJson(email, password))
-        }).then(response => {
+        const response = await fetchAPI('http://localhost:5678/api/users/login', 'POST', JSON.stringify({ email, password }));
+        console.log(response);
+        if (response) {
 
-            if (response.status === 404) {
-                alert('Erreur dans l’identifiant ou le mot de passe');
-            } else if (response.status === 401) {
-                alert('Erreur dans l’identifiant ou le mot de passe');
-            } else if (response.status === 200) {
-                document.querySelector('.worksGallery').style.fontWeight = '600';
-                document.querySelector('.login').style.fontWeight = '400';
-                document.querySelector('.contact').style.fontWeight = '400';
-                document.querySelector('#login').style.display = 'none';
-                document.querySelector('.login').innerText = 'logout';
-                showWorks();
-                console.log('connection validated');
-                // JSON.stringify(response)
-                // console.log(response);
-                return response.json();
-            } else {
-                alert('Probleme' + response.status);
-            }
-        }).then(response => {
-            console.log(response)
-            console.log(response.token)
-            createCookie(response.token, response.userId);
-            return response;
-        });
+            document.querySelector('.login').innerText = 'logout';
+            navUpdate('600', '400', '400', 'none', true)
+            console.log('connection validated');
+
+        }
+        setStorage(response);
+
+        return response;
     }
-}
-
-const createCookie = function (token, userId) {
-    // document.cookie = "token=" + token;
-    // document.cookie = "userId=" + userId;
-    console.log("cookie created for user " + userId);
-
-    // data = {
-    //     token: token,
-    //     userId: userId
-    // };
-
-    var data = '{'
-        + '"token" : token,'
-        + '"userId"  : userId'
-        + '}';
-
-    const d = new Date();
-    d.setTime(d.getTime() - d.getTimezoneOffset() + (30 * 60 * 1000)); //30 minutes format: min
-    let expires = "expires=" + d.toUTCString();
-    document.cookie = "Authorization" + "=" + data + ";" + expires + ";path=/";
-    console.log(d.getTimezoneOffset());
-}
-
-const getCookie = function () {
-    let cookie = document.cookie;
-
-    cookieList = cookie.split(';');
-
-    console.log(cookieList);
-    return cookie;
 }
 
 const triggeredLogoutSubmit = function () { }
 
-const showWorks = function () {
+const showWorks = () => {
     document.querySelector('#portfolio').style.display = 'flex';
     document.querySelector('#introduction').style.display = 'flex';
     document.querySelector('#contact').style.display = 'block';
 }
 
-const hideZone = function (zone) {
+const hideZone = (zone) => {
     document.querySelector(zone).style.display = 'none';
 }
+
+
 //MAIN CALLS
 const works = generateWorks();
 triggers();
-console.log('cookie : ' + getCookie());

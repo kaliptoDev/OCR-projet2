@@ -343,7 +343,7 @@ li:hover {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-input[type="submit"] {
+input[type="submit"], input[type="button"] {
 	font-family: 'Syne';
 	font-weight: 700;
 	color: white;
@@ -400,7 +400,7 @@ input[type="submit"] {
 	border: none;
 }
 
-#login input[type="submit"] {
+#login input[type="button"] {
 	width: 180px;
 	font-weight: 700;
 	font-size: 14px;
@@ -408,7 +408,7 @@ input[type="submit"] {
 	transition: ease-in 0.1s;
 }
 
-#login input[type="submit"]:hover{
+#login input[type="button"]:hover{
 	background-color: #0E2F28;
 }
 
