@@ -1,10 +1,14 @@
-const STORAGE_KEY = "user_token"
+export const STORAGE_KEY = "user_token"
 
 export const setStorage = (data) => {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 export const getStorage = () => {
     return JSON.parse(window.localStorage.getItem(STORAGE_KEY));
+}
+
+export const deleteStorage = () => {
+    window.localStorage.removeItem(STORAGE_KEY);
 }
 
 export const createUserJson = (email, password) => {

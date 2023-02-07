@@ -1,4 +1,4 @@
-import { setStorage, getStorage, createUserJson, fetchAPI } from './utils.js'
+import { setStorage, getStorage, createUserJson, fetchAPI, deleteStorage, STORAGE_KEY } from './utils.js'
 
 // fetchAPI /\
 
@@ -92,14 +92,23 @@ const triggerNavWork = () => {
 
 const triggerNavLogin = () => {
     const loginTrigger = document.querySelector('.login');
-    loginTrigger.addEventListener('click', function () {
+    loginTrigger.addEventListener('click', triggerLogInorOut);
+
+}
+
+const triggerLogInorOut = () => {
+    if (getStorage(STORAGE_KEY)) {
+        document.querySelector('.login').innerText = 'login';
+        deleteStorage();
+        navUpdate('600', '400', '400', 'none', true);
+    }
+    else {
         console.log('login');
         hideZone('#introduction');
         hideZone('#portfolio');
         hideZone('#contact');
         navUpdate('400', '600', '400', 'flex', false)
-    });
-
+    }
 }
 
 const triggerLogin = () => {
@@ -122,7 +131,6 @@ const triggeredLoginSubmit = async () => {
         alert('Veuillez remplir tous les champs');
     } else {
         const response = await fetchAPI('http://localhost:5678/api/users/login', 'POST', JSON.stringify({ email, password }));
-        console.log(response);
         if (response) {
 
             document.querySelector('.login').innerText = 'logout';
@@ -131,12 +139,21 @@ const triggeredLoginSubmit = async () => {
 
         }
         setStorage(response);
-
+        loggedInDetection();
         return response;
     }
 }
 
-const triggeredLogoutSubmit = function () { }
+const loggedInDetection = () => {
+    if(getStorage(STORAGE_KEY)) {
+        document.querySelector('.login').innerText = 'logout';
+        navUpdate('600', '400', '400', 'none', true)
+        const userId = getStorage(STORAGE_KEY).userId;
+        console.log(`user Id = ${userId}`);
+        const token = getStorage(STORAGE_KEY).token;
+        console.log(`token = ${token}`);
+    }
+}
 
 const showWorks = () => {
     document.querySelector('#portfolio').style.display = 'flex';
@@ -152,3 +169,4 @@ const hideZone = (zone) => {
 //MAIN CALLS
 const works = generateWorks();
 triggers();
+loggedInDetection();
