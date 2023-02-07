@@ -144,6 +144,10 @@ body {
 	/* background-color: red; */
 }
 
+.loginPage {
+	min-height: 100vh;
+}/** login toggle in order to align footer, with body being 100vh **/
+
 header {
 	display: flex;
 	justify-content: space-between;

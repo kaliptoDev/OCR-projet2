@@ -43,3 +43,9 @@ export const fetchAPI = async (url, method, payload) => {
     }
 
 }
+
+export const resetFooter = () => {
+    document.querySelector('body').classList.remove('loginPage');
+    document.querySelector('footer').style.bottom = '';
+
+}

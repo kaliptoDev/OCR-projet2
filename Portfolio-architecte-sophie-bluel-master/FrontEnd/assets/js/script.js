@@ -1,4 +1,4 @@
-import { setStorage, getStorage, createUserJson, fetchAPI, deleteStorage, STORAGE_KEY } from './utils.js'
+import { setStorage, getStorage, createUserJson, fetchAPI, deleteStorage, STORAGE_KEY, resetFooter } from './utils.js'
 
 // fetchAPI /\
 
@@ -13,6 +13,7 @@ const fetchWorks = async (workId) => {
         return worksList;
     }
 }
+
 
 
 const generateWork = (work) => {
@@ -53,8 +54,8 @@ const navUpdate = (parameter1, parameter2, parameter3, parameter4, worksBoolean)
 }
 
 const triggers = () => {
-    triggerNavContact();
     triggerFilter();
+    triggerNavContact();
     triggerNavLogin();
     triggerNavWork();
     triggerLogin();
@@ -76,8 +77,8 @@ const triggerNavContact = () => {
         console.log('contact');
         navUpdate('400', '400', '600', 'none', true)
         document.querySelector('#contact').scrollIntoView({ behavior: 'smooth' }, true);
+        resetFooter();
     });
-
 
 }
 
@@ -86,8 +87,8 @@ const triggerNavWork = () => {
     backToWorks.addEventListener('click', () => {
         console.log('works');
         navUpdate('600', '400', '400', 'none', true)
+        resetFooter();
     });
-
 }
 
 const triggerNavLogin = () => {
@@ -108,6 +109,8 @@ const triggerLogInorOut = () => {
         hideZone('#portfolio');
         hideZone('#contact');
         navUpdate('400', '600', '400', 'flex', false)
+        document.querySelector('body').classList.add('loginPage');
+        document.querySelector('footer').style.bottom = '0';
     }
 }
 
@@ -140,6 +143,7 @@ const triggeredLoginSubmit = async () => {
         }
         setStorage(response);
         loggedInDetection();
+        resetFooter();
         return response;
     }
 }
