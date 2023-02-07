@@ -151,10 +151,62 @@ body {
 header {
 	display: flex;
 	justify-content: space-between;
-	margin: 50px 0;
-
+	/* margin: 50px 0; */
+	flex-direction: column;
 }
 
+.headerCorpse{
+	display: flex;
+	justify-content: space-between;
+	margin: 100px 0;
+}
+
+.adminBar {
+	display: none;
+	align-items: center;
+	color: white;
+	background-color: black;
+	height: 60px;
+	width: 100vw;
+	left: 0;
+	top: 0;
+	right: 0;
+	text-align: center;
+	position: absolute;
+	justify-content: center;
+	align-items: center;
+
+	font-family: 'Work Sans';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 19px;
+
+}
+.adminBar > i {
+	margin-right: 10px;
+}
+
+.publishChanges{
+	margin: 0 20px;
+	border-radius: 60px;
+	height: 38px;
+	transition: ease-in-out 0.2s;
+}
+
+.publishChanges:hover{
+	cursor: pointer;
+	background-color: #D3D3D3;
+}
+
+.publishChanges > span{
+	font-family: 'Work Sans';
+	font-style: normal;
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 16px;
+	margin: 0 20px;
+}
 
 
 section {
@@ -444,4 +496,12 @@ footer nav ul {
 
 .hidden {
 	display: none;
+}
+
+.margin100_0_50_0{
+	margin: 100px 0 50px 0;
+}
+
+.margin50_0{
+	margin: 50px 0;
 }

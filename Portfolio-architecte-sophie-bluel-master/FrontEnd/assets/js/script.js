@@ -53,6 +53,12 @@ const navUpdate = (parameter1, parameter2, parameter3, parameter4, worksBoolean)
     document.querySelector('#login').style.display = parameter4;
 }
 
+const setters = () => {
+    triggers();
+    stateAdminBar();
+    loggedInDetection();
+}
+
 const triggers = () => {
     triggerFilter();
     triggerNavContact();
@@ -112,6 +118,7 @@ const triggerLogInorOut = () => {
         document.querySelector('body').classList.add('loginPage');
         document.querySelector('footer').style.bottom = '0';
     }
+    stateAdminBar();
 }
 
 const triggerLogin = () => {
@@ -144,12 +151,14 @@ const triggeredLoginSubmit = async () => {
         setStorage(response);
         loggedInDetection();
         resetFooter();
+        stateAdminBar();
         return response;
     }
+    
 }
 
 const loggedInDetection = () => {
-    if(getStorage(STORAGE_KEY)) {
+    if (getStorage(STORAGE_KEY)) {
         document.querySelector('.login').innerText = 'logout';
         navUpdate('600', '400', '400', 'none', true)
         const userId = getStorage(STORAGE_KEY).userId;
@@ -169,8 +178,41 @@ const hideZone = (zone) => {
     document.querySelector(zone).style.display = 'none';
 }
 
+const stateAdminBar = () => {
+
+    if (getStorage()) {
+        document.querySelector('.adminBar').style.display = 'flex';
+        document.querySelector('.headerCorpse').classList.add('margin100_0_50_0')
+        document.querySelector('.headerCorpse').classList.remove('margin50_0')
+    }
+    else {
+        document.querySelector('.adminBar').style.display = 'none';
+        document.querySelector('.headerCorpse').classList.add('margin50_0')
+        document.querySelector('.headerCorpse').classList.remove('margin100_0_50_0')
+    }
+}
+
+
+const stateEditButtons = (state) => {
+    if (state) {
+        document.querySelector('.editButtons').style.display = 'block';
+    }
+    else {
+        document.querySelector('.editButtons').style.display = 'none';
+    }
+}
+
+const triggerModal = () => { }
+
+const displayModal = () => { }
+
+
+
+
+
+
+
 
 //MAIN CALLS
 const works = generateWorks();
-triggers();
-loggedInDetection();
+setters();

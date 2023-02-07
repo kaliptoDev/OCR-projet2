@@ -12,19 +12,30 @@
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
 	<script src="assets/js/script.js" type="module" defer></script>
+	<script src="https://kit.fontawesome.com/49a892503a.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
 	<header>
-		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
-		<nav>
-			<ul>
-				<li class="worksGallery">projets</li>
-				<li class="contact">contact</li>
-				<li class="login">login</li>
-				<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
-			</ul>
-		</nav>
+
+		<div class="adminBar">
+			<i class="fa-regular fa-pen-to-square"></i>
+			<span>Mode édition</span>
+			<button class="publishChanges">
+				<span>publier les changements</span>
+			</button>
+		</div>
+		<div class="headerCorpse">
+			<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
+			<nav>
+				<ul>
+					<li class="worksGallery">projets</li>
+					<li class="contact">contact</li>
+					<li class="login">login</li>
+					<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
+				</ul>
+			</nav>
+		</div>
 	</header>
 	<main>
 		<section id="introduction">
@@ -66,7 +77,7 @@
 				</div>
 			</div>
 			<div class="gallery">
-				
+
 			</div>
 		</section>
 		<section id="contact">
@@ -95,7 +106,7 @@
 					<label for="password">Mot de passe</label>
 					<input type="password" name="password" id="password_input">
 				</div>
-				<input type="button" value="Se connecter" id="loginSubmit" >
+				<input type="button" value="Se connecter" id="loginSubmit">
 			</form>
 			<span>
 				<a href="#">Mot de passe oublié</a>
