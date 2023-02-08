@@ -39,10 +39,27 @@
 	</header>
 	<main>
 		<section id="introduction">
-			<figure>
-				<img src="./assets/images/sophie-bluel.png" alt="">
-			</figure>
-			<article>
+			<div id="introductionFigureDiv">
+
+				<figure id="introductionFigure">
+					<img src="./assets/images/sophie-bluel.png" alt="">
+				</figure>
+				<div class="editButtons" id="introductionEditButton">
+					<button>
+						<i class="fa-regular fa-pen-to-square"></i>
+						<span>modifier</span>
+					</button>
+
+				</div>
+
+			</div>
+			<article id="articleDescription">
+				<div class="editButtons" id="articleEditButton">
+					<button>
+						<i class="fa-regular fa-pen-to-square"></i>
+						<span>Modifier</span>
+					</button>
+				</div>
 				<h2>Designer d'espace</h2>
 				<p>Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison
 					finale du chantier.</p>
@@ -54,7 +71,16 @@
 			</article>
 		</section>
 		<section id="portfolio">
-			<h2>Mes Projets</h2>
+			<div id="portfolioTitle">
+				<h2>Mes Projets
+				</h2>
+				<div class="editButtons" id="portfolioEditButton">
+					<button>
+						<i class="fa-regular fa-pen-to-square"></i>
+						<span>modifier</span>
+					</button>
+				</div>
+			</div>
 			<div class="filters">
 				<div class="filter">
 					<input type="radio" id="radio0" name="filter" value="all" class="checkboxes" checked>

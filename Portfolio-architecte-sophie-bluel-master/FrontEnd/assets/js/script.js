@@ -1,9 +1,11 @@
-import { setStorage, getStorage, createUserJson, fetchAPI, deleteStorage, STORAGE_KEY, resetFooter } from './utils.js'
+// import { setStorage, getStorage, createUserJson, fetchAPI, deleteStorage, STORAGE_KEY, resetFooter } from './index.js'
+// import * from './utils.js'
+import * as utils from './index.js'
 
 // fetchAPI /\
 
 const fetchWorks = async (workId) => {
-    const worksList = await fetchAPI('http://localhost:5678/api/works', 'GET');
+    const worksList = await utils.fetchAPI('http://localhost:5678/api/works', 'GET');
     if (!worksList) alert('Erreur lors du chargement des oeuvres');
 
     if (workId > 0) {
@@ -30,6 +32,7 @@ const generateWork = (work) => {
     document.querySelector('.gallery').appendChild(workElement);
     document.getElementById('work_' + work.id).appendChild(workElementFigureImg);
     document.getElementById('work_' + work.id).appendChild(captionWork);
+    document.getElementById('work_' + work.id).classList.add('work');
 
 }
 
@@ -55,8 +58,11 @@ const navUpdate = (parameter1, parameter2, parameter3, parameter4, worksBoolean)
 
 const setters = () => {
     triggers();
-    stateAdminBar();
+    updateAdminBar();
     loggedInDetection();
+    updateEditButtons();
+
+
 }
 
 const triggers = () => {
@@ -83,7 +89,7 @@ const triggerNavContact = () => {
         console.log('contact');
         navUpdate('400', '400', '600', 'none', true)
         document.querySelector('#contact').scrollIntoView({ behavior: 'smooth' }, true);
-        resetFooter();
+        utils.resetFooter();
     });
 
 }
@@ -93,7 +99,7 @@ const triggerNavWork = () => {
     backToWorks.addEventListener('click', () => {
         console.log('works');
         navUpdate('600', '400', '400', 'none', true)
-        resetFooter();
+        utils.resetFooter();
     });
 }
 
@@ -104,10 +110,11 @@ const triggerNavLogin = () => {
 }
 
 const triggerLogInorOut = () => {
-    if (getStorage(STORAGE_KEY)) {
+    if (utils.getStorage(utils.STORAGE_KEY)) {
         document.querySelector('.login').innerText = 'login';
-        deleteStorage();
+        utils.deleteStorage();
         navUpdate('600', '400', '400', 'none', true);
+        showFilters();
     }
     else {
         console.log('login');
@@ -118,7 +125,8 @@ const triggerLogInorOut = () => {
         document.querySelector('body').classList.add('loginPage');
         document.querySelector('footer').style.bottom = '0';
     }
-    stateAdminBar();
+    updateAdminBar();
+    updateEditButtons();
 }
 
 const triggerLogin = () => {
@@ -140,7 +148,7 @@ const triggeredLoginSubmit = async () => {
     if (email === '' || password === '') {
         alert('Veuillez remplir tous les champs');
     } else {
-        const response = await fetchAPI('http://localhost:5678/api/users/login', 'POST', JSON.stringify({ email, password }));
+        const response = await utils.fetchAPI('http://localhost:5678/api/users/login', 'POST', JSON.stringify({ email, password }));
         if (response) {
 
             document.querySelector('.login').innerText = 'logout';
@@ -148,24 +156,41 @@ const triggeredLoginSubmit = async () => {
             console.log('connection validated');
 
         }
-        setStorage(response);
+        utils.setStorage(response);
         loggedInDetection();
-        resetFooter();
-        stateAdminBar();
+        utils.resetFooter();
+        updateAdminBar();
+        updateEditButtons();
         return response;
     }
-    
+
 }
 
 const loggedInDetection = () => {
-    if (getStorage(STORAGE_KEY)) {
+    if (utils.getStorage()) {
         document.querySelector('.login').innerText = 'logout';
         navUpdate('600', '400', '400', 'none', true)
-        const userId = getStorage(STORAGE_KEY).userId;
+        const userId = utils.getStorage(utils.STORAGE_KEY).userId;
         console.log(`user Id = ${userId}`);
-        const token = getStorage(STORAGE_KEY).token;
+        const token = utils.getStorage(utils.STORAGE_KEY).token;
         console.log(`token = ${token}`);
+        // document.querySelector('.filters').classList.add('hidden');
+        hideFilters();
+    } else {
+        showFilters();
     }
+}
+
+const showFilters = () => {
+    document.querySelector('.filters').classList.remove('hidden');
+    document.querySelector('#portfolioTitle').classList.remove('margin50_0');
+    document.querySelector('#portfolioTitle').classList.add('margin60_0_40_0');
+}
+
+const hideFilters = () => {
+    document.querySelector('.filters').classList.add('hidden');
+    document.querySelector('#portfolioTitle').classList.add('margin50_0');
+    document.querySelector('#portfolioTitle').classList.remove('margin60_0_40_0');
 }
 
 const showWorks = () => {
@@ -174,13 +199,21 @@ const showWorks = () => {
     document.querySelector('#contact').style.display = 'block';
 }
 
+const hidden = (DOM) => {
+    document.querySelector(DOM).classList.add('hidden');
+}
+
 const hideZone = (zone) => {
     document.querySelector(zone).style.display = 'none';
 }
 
-const stateAdminBar = () => {
+const showZone = (zone) => {
+    document.querySelector(zone).style.display = 'block';
+}
 
-    if (getStorage()) {
+const updateAdminBar = () => {
+
+    if (utils.getStorage()) {
         document.querySelector('.adminBar').style.display = 'flex';
         document.querySelector('.headerCorpse').classList.add('margin100_0_50_0')
         document.querySelector('.headerCorpse').classList.remove('margin50_0')
@@ -193,13 +226,20 @@ const stateAdminBar = () => {
 }
 
 
-const stateEditButtons = (state) => {
-    if (state) {
-        document.querySelector('.editButtons').style.display = 'block';
+const updateEditButtons = () => {
+    if (!utils.getStorage()) {
+        hideZone('#introductionEditButton');
+        hideZone('#articleEditButton');
+        hideZone('#portfolioEditButton');
     }
     else {
-        document.querySelector('.editButtons').style.display = 'none';
+        showZone('#introductionEditButton');
+        showZone('#articleEditButton');
+        showZone('#portfolioEditButton');
     }
+
+
+
 }
 
 const triggerModal = () => { }
@@ -216,3 +256,5 @@ const displayModal = () => { }
 //MAIN CALLS
 const works = generateWorks();
 setters();
+// document.querySelector('.editButtons').classList.add('hidden');
+
