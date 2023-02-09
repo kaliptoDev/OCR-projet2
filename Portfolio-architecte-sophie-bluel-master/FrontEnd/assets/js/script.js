@@ -44,7 +44,7 @@ const generateWorks = async (workId) => {
     for (let work of works) {
         generateWork(work);
     }
-
+    console.log('works ==== ' + works);
     return works;
 }
 
@@ -71,6 +71,8 @@ const triggers = () => {
     triggerNavLogin();
     triggerNavWork();
     triggerLogin();
+    triggerModal();
+    triggerModalClose();
 }
 
 const triggerFilter = () => {
@@ -242,9 +244,78 @@ const updateEditButtons = () => {
 
 }
 
-const triggerModal = () => { }
+const triggerModal = () => {
+    const modal = document.querySelector('#portfolioEditButton');
+    modal.addEventListener('click', () => displayModal());
+ }
 
-const displayModal = () => { }
+const displayModal = () => {
+    const modal = document.querySelector('.modal');
+    modal.style.display = 'flex';
+    const modalBg = document.querySelector('.modalBg');
+    modalBg.style.display = 'flex';
+
+    generateWorksModal();
+}
+
+const generateWorksModal = async () => {
+    document.querySelector('.modalGallery').innerHTML = '';
+    const worksModal = await fetchWorks();
+
+    for (let work of worksModal) {
+        generateWorkModal(work);
+    }
+
+    console.log('worksModal ' + worksModal);
+
+}
+
+const generateWorkModal = (work) => {
+
+    const workElementFigure = document.createElement('figure');
+    const workElementFigurediv = document.createElement("div");
+    const workElementFigureImg = document.createElement("img");
+    const workCloseIcon = document.createElement("i");
+    const captionWork = document.createElement("figcaption");
+
+    workElementFigure.setAttribute('id', `work_${work.id}`);
+    workElementFigure.classList.add('modalFigure');
+    workElementFigurediv.classList.add('modalImgContainer');
+    workCloseIcon.classList.add('fa-regular', 'fa-trash-can', 'modalImgTrash');
+    captionWork.classList.add('modalFigcaption');
+    workElementFigureImg.src = work.imageUrl;
+    workElementFigureImg.crossOrigin = "anonymous";
+    workElementFigureImg.setAttribute('alt', work.title);
+    captionWork.innerText = 'éditer';
+
+    document.querySelector('.modalGallery').appendChild(workElementFigure);
+    workElementFigure.appendChild(workElementFigurediv);
+    workElementFigurediv.appendChild(workCloseIcon);
+    workElementFigurediv.appendChild(workElementFigureImg);
+    workElementFigure.appendChild(captionWork);
+
+    // workCloseIcon.addEventListener('click', () => deleteWork(work.id));
+}
+
+
+
+
+
+const triggerModalClose = () => {
+    const modal = document.querySelector('.modalCloseButton');
+    modal.addEventListener('click', () => closeModal());
+    const modalBg = document.querySelector('.modalBg');
+    modalBg.addEventListener('click', () => closeModal());
+}
+
+const closeModal = () => {
+    const modal = document.querySelector('.modal');
+    modal.style.display = 'none';
+    const modalBg = document.querySelector('.modalBg');
+    modalBg.style.display = 'none';
+
+    
+}
 
 
 
