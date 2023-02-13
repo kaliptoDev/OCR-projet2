@@ -2,7 +2,14 @@
 // import * from './utils.js'
 import * as utils from './index.js'
 
+// import { setStorage, getStorage, createUserJson, fetchAPI, deleteStorage, STORAGE_KEY, resetFooter } from './index.js'
+
 // fetchAPI /\
+
+/**
+ * @param {object} work 
+ * @description fetches the works details from the API
+ */
 
 const fetchWorks = async (workId) => {
     const worksList = await utils.fetchAPI('http://localhost:5678/api/works', 'GET');
@@ -16,11 +23,11 @@ const fetchWorks = async (workId) => {
     }
 }
 
+
 /**
  * @param {object} work 
- * @description generate a work element
+ * @description generate a work element in the gallery
  */
-
 const generateWork = (work) => {
     const workElement = document.createElement('figure');
     const workElementFigureImg = document.createElement("img");
@@ -39,6 +46,10 @@ const generateWork = (work) => {
 
 }
 
+/**
+ * @param {Int} workId 
+ * @description generate all the works in the gallery, depending on the filter or not
+ */
 const generateWorks = async (workId) => {
     const works = await fetchWorks(workId);
 
@@ -51,6 +62,10 @@ const generateWorks = async (workId) => {
     return works;
 }
 
+/**
+ * @param {null} none 
+ * @description sets the display of the nav bar
+ */
 const navUpdate = (parameter1, parameter2, parameter3, worksBoolean) => {
     document.querySelector('.worksGallery').style.fontWeight = parameter1;
     document.querySelector('.login').style.fontWeight = parameter2;
@@ -58,6 +73,10 @@ const navUpdate = (parameter1, parameter2, parameter3, worksBoolean) => {
     if (worksBoolean) { showWorks(); }
 }
 
+/**
+ * @param {null} none 
+ * @description calls every setter functions
+ */
 const setters = () => {
     triggers();
     updateAdminBar();
@@ -67,6 +86,10 @@ const setters = () => {
 
 }
 
+/**
+ * @param {null} none 
+ * @description calls every trigger functions
+ */
 const triggers = () => {
     triggerFilter();
     triggerNavContact();
@@ -75,7 +98,10 @@ const triggers = () => {
     triggerModal();
     triggerModalClose();
 }
-
+/**
+ * @param {null} none 
+ * @description sets up the event listener for the filter buttons, and applied the filter
+ */
 const triggerFilter = () => {
     const filtersInput = document.querySelectorAll('.filter input');
     for (let filter of filtersInput) {
@@ -86,6 +112,10 @@ const triggerFilter = () => {
 
 }
 
+/**
+ * @param {null} none 
+ * @description sets up the event listener for the contact button in nav
+ */
 const triggerNavContact = () => {
     const contactTrigger = document.querySelector('.contact');
     contactTrigger.addEventListener('click', function () {
@@ -96,7 +126,10 @@ const triggerNavContact = () => {
     });
 
 }
-
+/**
+ * @param {null} none 
+ * @description sets up the event listener for the works button in nav
+ */
 const triggerNavWork = () => {
     const backToWorks = document.querySelector('.worksGallery');
     backToWorks.addEventListener('click', () => {
@@ -106,12 +139,19 @@ const triggerNavWork = () => {
     });
 }
 
+/**
+ * @param {null} none 
+ * @description sets up the event listener for the login button in nav
+ */
 const triggerNavLogin = () => {
     const loginTrigger = document.querySelector('.login');
     loginTrigger.addEventListener('click', triggerLogInorOut);
 
 }
-
+/**
+ * @param {null} none 
+ * @description gets you to the login page if you are not logged in, or logs you out if you are logged in
+ */
 const triggerLogInorOut = () => {
     if (utils.getStorage(utils.STORAGE_KEY)) {
         document.querySelector('.login').innerText = 'login';
@@ -126,6 +166,10 @@ const triggerLogInorOut = () => {
     updateEditButtons();
 }
 
+/**
+ * @param {null} none 
+ * @description updates the nav items
+ */
 const loggedInDetection = () => {
     if (utils.getStorage()) {
         document.querySelector('.login').innerText = 'logout';
@@ -140,36 +184,62 @@ const loggedInDetection = () => {
     }
 }
 
+/**
+ * @param {null} none 
+ * @description shows the filters
+ */
 const showFilters = () => {
     document.querySelector('.filters').classList.remove('hidden');
     document.querySelector('#portfolioTitle').classList.remove('margin50_0');
     document.querySelector('#portfolioTitle').classList.add('margin60_0_40_0');
 }
 
+/**
+ * @param {null} none 
+ * @description hides the filters
+ */
 const hideFilters = () => {
     document.querySelector('.filters').classList.add('hidden');
     document.querySelector('#portfolioTitle').classList.add('margin50_0');
     document.querySelector('#portfolioTitle').classList.remove('margin60_0_40_0');
 }
 
+/**
+ * @param {null} none 
+ * @description shows the works and the introduction
+ */
 const showWorks = () => {
     document.querySelector('#portfolio').style.display = 'flex';
     document.querySelector('#introduction').style.display = 'flex';
     document.querySelector('#contact').style.display = 'block';
 }
 
+/**
+ * @param {DOM} DOM 
+ * @description hides the DOM passed in parameter
+ */
 const hidden = (DOM) => {
     document.querySelector(DOM).classList.add('hidden');
 }
-
+/**
+ * @param {DOM} zone 
+ * @description hides the zone passed in parameter
+ */
 const hideZone = (zone) => {
     document.querySelector(zone).style.display = 'none';
 }
-
+/**
+ * @param {null} none 
+ * @description shows the zone passed in parameter
+ */
 const showZone = (zone) => {
     document.querySelector(zone).style.display = 'block';
 }
 
+/**
+ * @param {null} none 
+ * @description updates the admin bar depending on the user being logged in or not
+ */
 const updateAdminBar = () => {
 
     if (utils.getStorage()) {
@@ -183,7 +253,10 @@ const updateAdminBar = () => {
         document.querySelector('.headerCorpse').classList.remove('margin100_0_50_0')
     }
 }
-
+/**
+ * @param {null} none 
+ * @description updates the edit buttons depending on the user being logged in or not
+ */
 const updateEditButtons = () => {
     if (!utils.getStorage()) {
         hideZone('#introductionEditButton');
@@ -200,11 +273,21 @@ const updateEditButtons = () => {
 
 }
 
+// setSessionStorage()
+
+/**
+ * @param {null} none 
+ * @description sets up the event listener for the modal to be displayed
+ */
 const triggerModal = () => {
     const modal = document.querySelector('#portfolioEditButton');
     modal.addEventListener('click', () => displayModal());
  }
 
+ /**
+ * @param {null} none 
+ * @description display the modal
+ */
 const displayModal = () => {
     const modal = document.querySelector('.modal');
     modal.style.display = 'flex';
@@ -214,6 +297,10 @@ const displayModal = () => {
     generateWorksModal();
 }
 
+/**
+ * @param {null} none 
+ * @description generate the modal with all the works
+ */
 const generateWorksModal = async () => {
     document.querySelector('.modalGallery').innerHTML = '';
     const worksModal = await fetchWorks();
@@ -225,7 +312,10 @@ const generateWorksModal = async () => {
     console.log('worksModal ' + worksModal);
 
 }
-
+/**
+ * @param {object} work 
+ * @description generate a work element in the modal
+ */
 const generateWorkModal = (work) => {
 
     const workElementFigure = document.createElement('figure');
@@ -256,7 +346,10 @@ const generateWorkModal = (work) => {
 
 
 
-
+/**
+ * @param {null} none 
+ * @description Sets up the event listeners for the modal close
+ */
 const triggerModalClose = () => {
     const modal = document.querySelector('.modalCloseButton');
     modal.addEventListener('click', () => closeModal());
@@ -264,13 +357,15 @@ const triggerModalClose = () => {
     modalBg.addEventListener('click', () => closeModal());
 }
 
+/**
+ * @param {null} none 
+ * @description Closes the ongoing modal
+ */
 const closeModal = () => {
     const modal = document.querySelector('.modal');
     modal.style.display = 'none';
     const modalBg = document.querySelector('.modalBg');
     modalBg.style.display = 'none';
-
-    
 }
 
 

@@ -442,7 +442,6 @@ input[type="button"] {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	/* display: none; */
 }
 
 #login h2 {
@@ -457,7 +456,6 @@ input[type="button"] {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	/* height: 100vh; */
 }
 
 #login form div {
@@ -472,7 +470,6 @@ input[type="button"] {
 	font-weight: 500;
 	font-size: 14px;
 	line-height: 16px;
-	/* align-self: left; */
 }
 
 #login input {
@@ -567,6 +564,14 @@ footer nav ul {
 #articleEditButton {
 	margin: 0 0 20px 2px;
 
+}
+
+.error_login {
+	font-family: 'Work Sans';
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 16px;
+	margin: 0 0 15px 0;
 }
 
 .modalBg {
