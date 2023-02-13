@@ -16,7 +16,10 @@ const fetchWorks = async (workId) => {
     }
 }
 
-
+/**
+ * @param {object} work 
+ * @description generate a work element
+ */
 
 const generateWork = (work) => {
     const workElement = document.createElement('figure');
@@ -48,12 +51,11 @@ const generateWorks = async (workId) => {
     return works;
 }
 
-const navUpdate = (parameter1, parameter2, parameter3, parameter4, worksBoolean) => {
+const navUpdate = (parameter1, parameter2, parameter3, worksBoolean) => {
     document.querySelector('.worksGallery').style.fontWeight = parameter1;
     document.querySelector('.login').style.fontWeight = parameter2;
     document.querySelector('.contact').style.fontWeight = parameter3;
     if (worksBoolean) { showWorks(); }
-    document.querySelector('#login').style.display = parameter4;
 }
 
 const setters = () => {
@@ -70,7 +72,6 @@ const triggers = () => {
     triggerNavContact();
     triggerNavLogin();
     triggerNavWork();
-    triggerLogin();
     triggerModal();
     triggerModalClose();
 }
@@ -119,53 +120,10 @@ const triggerLogInorOut = () => {
         showFilters();
     }
     else {
-        console.log('login');
-        hideZone('#introduction');
-        hideZone('#portfolio');
-        hideZone('#contact');
-        navUpdate('400', '600', '400', 'flex', false)
-        document.querySelector('body').classList.add('loginPage');
-        document.querySelector('footer').style.bottom = '0';
+        window.location.href = 'login/index.html'
     }
     updateAdminBar();
     updateEditButtons();
-}
-
-const triggerLogin = () => {
-    const loginSubmit = document.querySelector('#loginSubmit');
-    loginSubmit.addEventListener('click', triggeredLoginSubmit);
-}
-
-
-const triggeredLoginSubmit = async () => {
-
-    const email = document.querySelector('#email_input').value;
-    document.querySelector('#email_input').value = '';
-    const password = document.querySelector('#password_input').value;
-    document.querySelector('#password_input').value = '';
-
-    console.log(email + ' ' + password);
-    console.log('works');
-
-    if (email === '' || password === '') {
-        alert('Veuillez remplir tous les champs');
-    } else {
-        const response = await utils.fetchAPI('http://localhost:5678/api/users/login', 'POST', JSON.stringify({ email, password }));
-        if (response) {
-
-            document.querySelector('.login').innerText = 'logout';
-            navUpdate('600', '400', '400', 'none', true)
-            console.log('connection validated');
-
-        }
-        utils.setStorage(response);
-        loggedInDetection();
-        utils.resetFooter();
-        updateAdminBar();
-        updateEditButtons();
-        return response;
-    }
-
 }
 
 const loggedInDetection = () => {
@@ -176,7 +134,6 @@ const loggedInDetection = () => {
         console.log(`user Id = ${userId}`);
         const token = utils.getStorage(utils.STORAGE_KEY).token;
         console.log(`token = ${token}`);
-        // document.querySelector('.filters').classList.add('hidden');
         hideFilters();
     } else {
         showFilters();
@@ -226,7 +183,6 @@ const updateAdminBar = () => {
         document.querySelector('.headerCorpse').classList.remove('margin100_0_50_0')
     }
 }
-
 
 const updateEditButtons = () => {
     if (!utils.getStorage()) {
@@ -327,5 +283,4 @@ const closeModal = () => {
 //MAIN CALLS
 const works = generateWorks();
 setters();
-// document.querySelector('.editButtons').classList.add('hidden');
 
