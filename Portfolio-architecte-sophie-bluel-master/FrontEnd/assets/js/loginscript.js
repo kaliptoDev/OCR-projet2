@@ -45,21 +45,6 @@ const triggeredLoginSubmit = async () => {
         document.querySelector('#error_login').display = 'block';
         document.querySelector('#error_login').innerText = error;
     }
-
-    // utils.setStorage(response);
-
-
-    // if (email === '' || password === '') {
-    //     alert('Veuillez remplir tous les champs');
-    // } else {
-    //     const response = await utils.fetchAPI('http://localhost:5678/api/users/login', 'POST', JSON.stringify({ email, password }));
-    //     if (response) {
-    //         console.log('connection validated');
-    //     }
-    //     utils.setStorage(response);
-    // }
-
-    // window.location.href = '../index.html';
 }
 
 const login = async (email, password) => {
@@ -83,8 +68,6 @@ const login = async (email, password) => {
                     document.querySelector('.error_login').style.display = 'none';
                     window.location.href = '../index.html';
                 }, 3000);
-
-                // window.location.href = '../index.html';
             }
 
         } catch (error) {

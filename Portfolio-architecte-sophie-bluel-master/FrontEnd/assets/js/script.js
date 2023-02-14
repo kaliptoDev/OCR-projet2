@@ -394,11 +394,6 @@ const createSessionStorage = async () => {
     }
 }
 
-
-
-
-
-
 //MAIN CALLS
 const works = generateWorks();
 setters();
