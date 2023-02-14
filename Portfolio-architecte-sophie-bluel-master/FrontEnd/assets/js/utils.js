@@ -35,27 +35,8 @@ export const createUserJson = (email, password) => {
 
 }
 
-export const fetchAPI2 = async (url, method, payload) => {
-    
-        const res = await fetch(url, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: payload || null
-        });
-        // if (!res.ok) throw new Error(res.status);
-        return res;
-        // const data = await res.json();
-        // console.log(data);
-        // return data;
-    
-    
-
-}
-
 export const fetchAPI = async (url, method, payload) => {
-    try {
+    
         const res = await fetch(url, {
             method: method,
             headers: {
@@ -63,16 +44,7 @@ export const fetchAPI = async (url, method, payload) => {
             },
             body: payload || null
         });
-        if (!res.ok) throw new Error(res.status);
-
-        const data = await res.json();
-        // console.log(data);
-        return data;
-    }
-    catch (error) {
-        console.log(error);
-        return null;
-    }
+        return res;
 
 }
 

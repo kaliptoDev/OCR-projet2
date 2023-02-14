@@ -1,8 +1,8 @@
-// import { setStorage, getStorage, createUserJson, fetchAPI, deleteStorage, STORAGE_KEY, resetFooter } from './index.js'
+// import { setStorage, getStorage, createUserJson, deleteStorage, STORAGE_KEY, resetFooter } from './index.js'
 // import * from './utils.js'
 import * as utils from './index.js'
 
-// import { setStorage, getStorage, createUserJson, fetchAPI, deleteStorage, STORAGE_KEY, resetFooter } from './index.js'
+// import { setStorage, getStorage, createUserJson, deleteStorage, STORAGE_KEY, resetFooter } from './index.js'
 
 // fetchAPI /\
 
@@ -12,14 +12,22 @@ import * as utils from './index.js'
  */
 
 const fetchWorks = async (workId) => {
-    const worksList = await utils.fetchAPI('http://localhost:5678/api/works', 'GET');
-    if (!worksList) alert('Erreur lors du chargement des oeuvres');
-
-    if (workId > 0) {
-        return worksList.filter(work => work.categoryId === workId);
+    try {
+        const reponse = await utils.fetchAPI('http://localhost:5678/api/works', 'GET');
+        if (!reponse.ok) throw new Error(reponse.status);
+        const data = await reponse.json();
+        console.log(data);
+        if (workId > 0) {
+            return data.filter(work => work.categoryId === workId);
+        }
+        else {
+            return data;
+        }
     }
-    else {
-        return worksList;
+    catch (error) {
+        console.log(error);
+        alert('Erreur lors du chargement des oeuvres');
+        return null;
     }
 }
 
@@ -82,7 +90,7 @@ const setters = () => {
     updateAdminBar();
     loggedInDetection();
     updateEditButtons();
-
+    sessionStorageDetection();
 
 }
 
@@ -156,6 +164,7 @@ const triggerLogInorOut = () => {
     if (utils.getStorage(utils.STORAGE_KEY)) {
         document.querySelector('.login').innerText = 'login';
         utils.deleteStorage();
+        utils.deleteSessionStorage();
         navUpdate('600', '400', '400', 'none', true);
         showFilters();
     }
@@ -282,12 +291,12 @@ const updateEditButtons = () => {
 const triggerModal = () => {
     const modal = document.querySelector('#portfolioEditButton');
     modal.addEventListener('click', () => displayModal());
- }
+}
 
- /**
- * @param {null} none 
- * @description display the modal
- */
+/**
+* @param {null} none 
+* @description display the modal
+*/
 const displayModal = () => {
     const modal = document.querySelector('.modal');
     modal.style.display = 'flex';
@@ -368,7 +377,25 @@ const closeModal = () => {
     modalBg.style.display = 'none';
 }
 
+const sessionStorageDetection = () => {
+    if (!utils.getSessionStorage()) {
+        createSessionStorage();
+    }
+}
 
+const createSessionStorage = async () => {
+    try {
+        const reponse = await utils.fetchAPI('http://localhost:5678/api/works', 'GET');
+        if (!reponse.ok) throw new Error(reponse.status);
+        const data = await reponse.json();
+        utils.setSessionStorage(data);
+    }
+    catch (error) {
+        console.log(error);
+        alert('Erreur lors du chargement des oeuvres dans le sessionStorage');
+        return null;
+    }
+}
 
 
 

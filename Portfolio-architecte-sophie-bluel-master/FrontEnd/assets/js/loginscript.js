@@ -60,7 +60,7 @@ const login = async (email, password) => {
         throw new Error('Veuillez remplir tous les champs');
     } else {
         try {
-            const response = await utils.fetchAPI2('http://localhost:5678/api/users/login', 'POST', JSON.stringify({ email, password }));
+            const response = await utils.fetchAPI('http://localhost:5678/api/users/login', 'POST', JSON.stringify({ email, password }));
             if (response.status === 404) {
                 throw new Error('Identifiants incorrects');
 
