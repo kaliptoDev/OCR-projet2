@@ -352,9 +352,6 @@ const generateWorkModal = (work) => {
     // workCloseIcon.addEventListener('click', () => deleteWork(work.id));
 }
 
-
-
-
 /**
  * @param {null} none 
  * @description Sets up the event listeners for the modal close

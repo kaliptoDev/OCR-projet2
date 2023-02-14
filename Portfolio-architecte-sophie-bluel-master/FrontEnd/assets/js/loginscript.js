@@ -9,6 +9,13 @@ const triggers = () => {
 const triggerLogin = () => {
     const loginSubmit = document.querySelector('#loginSubmit');
     loginSubmit.addEventListener('click', triggeredLoginSubmit);
+    const input = document.getElementById("loginBody");
+    input.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          document.getElementById("loginSubmit").click();
+        }
+      });
 }
 
 const triggerNavContact = () => {
