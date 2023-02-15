@@ -1,6 +1,7 @@
 // import { setStorage, getStorage, createUserJson, deleteStorage, STORAGE_KEY, resetFooter } from './index.js'
 // import * from './utils.js'
 import * as utils from './index.js'
+import { deleteSessionStorage } from './index.js';
 // import { setSessionStorage } from './index.js';
 
 // import { setStorage, getStorage, createUserJson, deleteStorage, STORAGE_KEY, resetFooter } from './index.js'
@@ -108,7 +109,7 @@ const triggers = () => {
     triggerModalClose();
     triggerGalleryDeletion();
     applyChangesAdminBarTrigger();
-
+    // triggerModalGalleryDeletion();
 }
 /**
  * @param {null} none 
@@ -188,6 +189,7 @@ const triggerGalleryDeletion = () => {
         // const works = await fetchWorks();
         // utils.setSessionStorage(works);
         generateWorksModal();
+
     });
 }
 
@@ -309,6 +311,22 @@ const triggerModal = () => {
     modal.addEventListener('click', () => displayModal());
 }
 
+const triggerModalGalleryDeletion = () => {
+    const trash = document.querySelectorAll('.modalImgTrash');
+    console.warn(trash);
+    trash.forEach(trashEl => {
+        trashEl.addEventListener('click', () => {
+            var id = trashEl.getAttribute('id');
+            console.warn(id);
+            id = id.slice(10);
+            console.warn(id);
+            deleteModalGalleryItem(id);
+            generateWorksModal();
+            console.warn('trash clicked');
+        })
+    })
+}
+
 /**
 * @param {null} none 
 * @description display the modal
@@ -320,6 +338,8 @@ const displayModal = () => {
     modalBg.style.display = 'flex';
 
     generateWorksModal();
+    triggerModalGalleryDeletion();
+
 }
 
 /**
@@ -354,6 +374,7 @@ const generateWorkModal = (work) => {
     workElementFigure.classList.add('modalFigure');
     workElementFigurediv.classList.add('modalImgContainer');
     workCloseIcon.classList.add('fa-regular', 'fa-trash-can', 'modalImgTrash');
+    workCloseIcon.setAttribute('id', `workTrash_${work.id}`);
     captionWork.classList.add('modalFigcaption');
     workElementFigureImg.src = work.imageUrl;
     workElementFigureImg.crossOrigin = "anonymous";
@@ -411,11 +432,34 @@ const createSessionStorage = async () => {
     }
 }
 
+const deleteModalGalleryItem = (workId) => {
+    const workElement = document.querySelector(`#work_${workId}`);
+    workElement.remove();
+    updateSessionStorage(workId);
+    generateWorksModal();
+}
+
+const updateSessionStorage = (workId) => {
+    var works = utils.getSessionStorage();
+    works.splice(works.findIndex(work => work.id === workId), 1);
+    console.log(works);
+
+    // const workIndex = works.findIndex(work => work.id === workId);
+    // console.warn("workindex: " + workIndex);
+    // works.splice(workIndex, 1);
+    // var workstemp = [];
+    // workstemp = works.filter(work => work.id !== workId);
+    // console.warn(works.filter(work => work.id !== workId));
+    deleteSessionStorage();
+    utils.setSessionStorage(works);
+    // console.warn(workstemp);
+}
+
 const applyChangesAdminBarTrigger = () => {
-    const adminBar= document.querySelector('.publishChanges');
+    const adminBar = document.querySelector('.publishChanges');
     adminBar.addEventListener('click', () => {
         const works = utils.getSessionStorage();
-        if(works === null) deleteAllWorksFromDB();
+        if (works === null) deleteAllWorksFromDB();
         else {
             utils.updateAllWorksToDB(works);
         }
