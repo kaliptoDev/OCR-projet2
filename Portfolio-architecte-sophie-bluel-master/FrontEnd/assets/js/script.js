@@ -1,6 +1,7 @@
 // import { setStorage, getStorage, createUserJson, deleteStorage, STORAGE_KEY, resetFooter } from './index.js'
 // import * from './utils.js'
 import * as utils from './index.js'
+// import { setSessionStorage } from './index.js';
 
 // import { setStorage, getStorage, createUserJson, deleteStorage, STORAGE_KEY, resetFooter } from './index.js'
 
@@ -105,6 +106,9 @@ const triggers = () => {
     triggerNavWork();
     triggerModal();
     triggerModalClose();
+    triggerGalleryDeletion();
+    applyChangesAdminBarTrigger();
+
 }
 /**
  * @param {null} none 
@@ -173,6 +177,18 @@ const triggerLogInorOut = () => {
     }
     updateAdminBar();
     updateEditButtons();
+}
+
+const triggerGalleryDeletion = () => {
+    const galleryDelete = document.querySelector('.modalDeleteGallery');
+    galleryDelete.addEventListener('click', async () => {
+        // utils.deleteAllWorksFromDB();
+        utils.deleteSessionStorage();
+        utils.setSessionStorage(null);
+        // const works = await fetchWorks();
+        // utils.setSessionStorage(works);
+        generateWorksModal();
+    });
 }
 
 /**
@@ -312,12 +328,13 @@ const displayModal = () => {
  */
 const generateWorksModal = async () => {
     document.querySelector('.modalGallery').innerHTML = '';
-    const worksModal = await fetchWorks();
-
-    for (let work of worksModal) {
-        generateWorkModal(work);
+    // const worksModal = await fetchWorks();
+    const worksModal = utils.getSessionStorage();
+    if (worksModal !== null) {
+        for (let work of worksModal) {
+            generateWorkModal(work);
+        }
     }
-
     console.log('worksModal ' + worksModal);
 
 }
@@ -394,7 +411,20 @@ const createSessionStorage = async () => {
     }
 }
 
+const applyChangesAdminBarTrigger = () => {
+    const adminBar= document.querySelector('.publishChanges');
+    adminBar.addEventListener('click', () => {
+        const works = utils.getSessionStorage();
+        if(works === null) deleteAllWorksFromDB();
+        else {
+            utils.updateAllWorksToDB(works);
+        }
+    })
+}
+
+
 //MAIN CALLS
-const works = generateWorks();
+const works = await generateWorks();
 setters();
+
 

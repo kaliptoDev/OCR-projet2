@@ -36,15 +36,22 @@ export const createUserJson = (email, password) => {
 }
 
 export const fetchAPI = async (url, method, payload) => {
-    
-        const res = await fetch(url, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: payload || null
-        });
-        return res;
+    if (method === 'DELETE') {
+        var headers = {
+            'Content-Type': 'application/json;charset=utf-8',
+            'Authorization': 'Bearer ' + getStorage().token
+        };
+    } else {
+        var headers = { 'Content-Type': 'application/json;charset=utf-8' };
+        // headersJSON = JSON.stringify(headersJSON);
+    }
+
+    const res = await fetch(url, {
+        method: method,
+        headers: headers,
+        body: payload || null
+    });
+    return res;
 
 }
 
@@ -53,3 +60,28 @@ export const resetFooter = () => {
     document.querySelector('footer').style.bottom = '';
 
 }
+
+export const deleteAllWorksFromDB = () => {
+    try {
+        const works = getSessionStorage();
+        works.forEach(work => {
+            const reponse = fetchAPI(`http://localhost:5678/api/works/${work.id}`, 'DELETE', null);
+            if (reponse.status === 200) {
+                console.log('work deleted');
+            } else if (reponse.status === 401) {
+                console.log('Unauthorized');
+                throw new Error('Unauthorized');
+            }
+            else if (reponse.status === 500) {
+                console.log('Unexepected behaviour');
+                throw new Error('Unexepected behaviour');
+            }
+        });
+
+    } catch (error) {
+        console.log(error);
+        alert('Une erreur est survenue, veuillez réessayer. Erreur: ' + error);
+    }
+}
+
+export const updateAllWorksToDB = () => {}
