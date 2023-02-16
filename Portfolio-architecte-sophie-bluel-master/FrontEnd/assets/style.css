@@ -622,6 +622,7 @@ footer nav ul {
 }
 
 .modalBackButton {
+	display: none;
 	position: absolute;
 	top: 30px;
 	left: 30px;
@@ -736,7 +737,7 @@ footer nav ul {
 	color: #D60303;
 }
 
-.modalConfirmNewPhotoButton[allowed="false"] {
+.modalConfirmNewPhotoButton {
 	font-family: 'Syne';
 	font-weight: 700;
 	color: white;
@@ -750,16 +751,23 @@ footer nav ul {
 	border: none;
 	transition: ease-in-out 0.2s;
 	display: none;
+	
+}
+
+.modalConfirmNewPhotoButton[allowed="false"] {
+	background-color: #A7A7A7;
+}
+
+.modalConfirmNewPhotoButton[allowed="true"] {
+	cursor: pointer;
+	background-color: #0E2F28;
+	
 }
 
 .modalConfirmNewPhotoButton[allowed="true"]:hover {
 	cursor: pointer;
 	background-color: #0E2F28;
-}
-
-.modalConfirmNewPhotoButton[allowed="true"]:hover {
-	cursor: pointer;
-	background-color: #0E2F28;
+	transform: scale(1.015);
 }
 
 .modalGallery[isGallery="false"] {
@@ -840,7 +848,7 @@ footer nav ul {
 	margin: 8px 0 20px 0;
 }
 
-.addPhotoForm{
+.addPhotoForm {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;

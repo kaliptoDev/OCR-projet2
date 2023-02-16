@@ -498,6 +498,7 @@ const triggerModalBack = () => {
         modalDeleteGallery.style.display = 'block';
         const modalConfirmNewWork = document.querySelector('.modalConfirmNewPhotoButton');
         modalConfirmNewWork.style.display = 'none';
+        document.querySelector('.modalBackButton').style.display = 'none';
     });
 }
 
@@ -505,6 +506,7 @@ const displayNewWorkModal = () => {
     document.querySelector('.modalGallery').innerHTML = '';
     const modalH2 = document.querySelector('.modalH2');
     modalH2.innerText = 'Ajout photo';
+    document.querySelector('.modalBackButton').style.display = 'block';
     changeModalButtons();
     generateNewWorkModal();
 }
