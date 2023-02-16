@@ -621,6 +621,23 @@ footer nav ul {
 	transform: scale(1.03);
 }
 
+.modalBackButton {
+	position: absolute;
+	top: 30px;
+	left: 30px;
+	border: none;
+	background-color: white;
+	font-family: 'Work Sans';
+	font-size: 20px;
+	color: #000000;
+	transition: ease-in-out 0.1s;
+}
+
+.modalBackButton:hover {
+	cursor: pointer;
+	transform: scale(1.03);
+}
+
 .modalH2 {
 	color: black;
 	font-family: 'Work Sans';
@@ -630,16 +647,14 @@ footer nav ul {
 	margin: 10px 0 0 0;
 }
 
-.modalGallery {
+.modalGallery[isGallery="true"] {
 	width: 100%;
 	height: 100%;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 	grid-column-gap: 6px;
 	grid-row-gap: 10px;
-	/* margin: 50px 100px; */
 	border-bottom: #B3B3B3 1px solid;
-	/* background-color: gray; */
 	padding-bottom: 40px;
 	margin: 50px 0 40px 0;
 }
@@ -692,7 +707,6 @@ footer nav ul {
 	background-color: #1D6154;
 	font-size: 14px;
 	line-height: 17px;
-	/* margin: 2em auto; */
 	width: 240px;
 	height: 36px;
 	text-align: center;
@@ -706,7 +720,7 @@ footer nav ul {
 	background-color: #0E2F28;
 }
 
-.modalDeleteGallery{
+.modalDeleteGallery {
 	margin: 20px 0 0 0;
 	color: #d65353;
 	font-family: 'Syne';
@@ -716,12 +730,156 @@ footer nav ul {
 	transition: ease-in-out 0.1s;
 }
 
-.modalDeleteGallery:hover{
+.modalDeleteGallery:hover {
 	cursor: pointer;
 	transform: scale(1.015);
 	color: #D60303;
 }
 
-/* .addModalPhotoButton:hover {
+.modalConfirmNewPhotoButton[allowed="false"] {
+	font-family: 'Syne';
+	font-weight: 700;
+	color: white;
+	background-color: #A7A7A7;
+	font-size: 14px;
+	line-height: 17px;
+	width: 240px;
+	height: 36px;
+	text-align: center;
+	border-radius: 60px;
+	border: none;
+	transition: ease-in-out 0.2s;
+	display: none;
+}
+
+.modalConfirmNewPhotoButton[allowed="true"]:hover {
+	cursor: pointer;
+	background-color: #0E2F28;
+}
+
+.modalConfirmNewPhotoButton[allowed="true"]:hover {
+	cursor: pointer;
+	background-color: #0E2F28;
+}
+
+.modalGallery[isGallery="false"] {
+	display: flex;
+	flex-direction: column;
+	border-bottom: #B3B3B3 1px solid;
+	padding-bottom: 40px;
+	margin: 50px 0 30px 0;
+}
+
+.addPhotoSection {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-color: #E8F1F7;
+	border-radius: 3px;
+	width: 420px;
+	height: 180px;
+	margin: 0;
+}
+
+#addPhotoInput {
+	display: none;
+}
+
+/* transform: scale(1.15, 1.07); */
+
+.addPhotoIconContainer {
+	display: flex;
+	margin: 10px;
+	width: 30px;
+	height: 30px;
+	/* text-align: center; */
+	justify-content: center;
+	align-items: center;
+}
+
+.addPhotoIcon {
+	/* width: 60px;
+	height: 60px; */
+	margin: 30px 0 20px 0;
+	color: #B9C5CC;
+	/* transform: scale(5.4, 5) */
+}
+
+.addPhotoInputLabel {
+	font-family: 'Work Sans';
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 16px;
+	color: #306685;
+	background-color: #CBD6DC;
+
+	width: 175px;
+	height: 36px;
+	text-align: center;
+	border-radius: 50px;
+	border: none;
+	transition: ease-in-out 0.2s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	padding: 10px 0;
+}
+
+.addPhotoInputLabel:hover {
+	background-color: #B5C1C7;
+}
+
+.addPhotoText {
+	font-family: 'Work Sans';
+	font-weight: 400;
+	font-size: 10px;
+	line-height: 12px;
+	color: #444444;
+	margin: 8px 0 20px 0;
+}
+
+.addPhotoForm{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: baseline;
+	width: 100%;
+	margin: 30px 0 0 0;
+}
+
+.addPhotoForm label {
+	font-family: 'Work Sans';
+	font-style: normal;
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 16px;
+	color: #3D3D3D;
+	margin: 0 0 10px 0;
+}
+
+.addPhotoForm input {
+	width: 100%;
+	height: 50px;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	border: none;
+}
+
+.addPhotoForm select {
+	width: 100%;
+	height: 50px;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	border: none;
+}
+
+.addPhotoForm option:hover {
+	width: 100%;
+	height: 20px;
+	font-family: 'Work Sans';
+	font-style: normal;
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 16px;
 	background-color: red;
-} */
+}

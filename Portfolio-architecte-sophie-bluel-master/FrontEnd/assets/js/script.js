@@ -339,7 +339,8 @@ const displayModal = () => {
 
     generateWorksModal();
     triggerModalGalleryDeletion();
-
+    triggerAddWorkToModal();
+    triggerModalBack();
 }
 
 /**
@@ -380,7 +381,7 @@ const generateWorkModal = (work) => {
     workElementFigureImg.crossOrigin = "anonymous";
     workElementFigureImg.setAttribute('alt', work.title);
     captionWork.innerText = 'éditer';
-
+    document.querySelector('.modalGallery').setAttribute('isGallery', 'true');
     document.querySelector('.modalGallery').appendChild(workElementFigure);
     workElementFigure.appendChild(workElementFigurediv);
     workElementFigurediv.appendChild(workCloseIcon);
@@ -466,6 +467,132 @@ const applyChangesAdminBarTrigger = () => {
     })
 }
 
+const changeModalButtons = () => {
+    const modalAddAPhotoButton = document.querySelector('.addModalPhotoButton');
+    modalAddAPhotoButton.style.display = 'none';
+    const modalDeleteGallery = document.querySelector('.modalDeleteGallery');
+    modalDeleteGallery.style.display = 'none';
+    const modalConfirmNewWork = document.querySelector('.modalConfirmNewPhotoButton');
+    modalConfirmNewWork.style.display = 'block';
+    console.warn("modalConfirmNewWork");
+
+}
+
+const triggerAddWorkToModal = () => {
+    const modalAddPhotoButton = document.querySelector('.addModalPhotoButton');
+    modalAddPhotoButton.addEventListener('click', () => {
+        displayNewWorkModal();
+
+    });
+}
+
+const triggerModalBack = () => {
+    const modalBackButton = document.querySelector('.modalBackButton');
+    modalBackButton.addEventListener('click', () => {
+        displayModal();
+        const modalH2 = document.querySelector('.modalH2');
+        modalH2.innerText = 'Galerie photo';
+        const modalAddAPhotoButton = document.querySelector('.addModalPhotoButton');
+        modalAddAPhotoButton.style.display = 'block';
+        const modalDeleteGallery = document.querySelector('.modalDeleteGallery');
+        modalDeleteGallery.style.display = 'block';
+        const modalConfirmNewWork = document.querySelector('.modalConfirmNewPhotoButton');
+        modalConfirmNewWork.style.display = 'none';
+    });
+}
+
+const displayNewWorkModal = () => {
+    document.querySelector('.modalGallery').innerHTML = '';
+    const modalH2 = document.querySelector('.modalH2');
+    modalH2.innerText = 'Ajout photo';
+    changeModalButtons();
+    generateNewWorkModal();
+}
+
+const generateNewWorkModal = () => {
+    const addPhotoSection = document.createElement('section');
+    // const addPhotoIconContainer = document.createElement('div');
+    const addPhotoIcon = document.createElement('i');
+    const addPhotoInput = document.createElement('input');
+    const addPhotoInputLabel = document.createElement('label');
+    const addPhotoText = document.createElement('span');
+    const form = document.createElement('form');
+    const input = document.createElement('input');
+    const label = document.createElement('label');
+    const input2 = document.createElement('select');
+    const label2 = document.createElement('label');
+
+    const section = document.querySelector('.modalGallery');
+    section.setAttribute('isGallery', 'false');
+    section.appendChild(addPhotoSection);
+
+    addPhotoSection.classList.add('addPhotoSection');
+    addPhotoSection.appendChild(addPhotoIcon);
+    // addPhotoIconContainer.classList.add('addPhotoIconContainer');
+    // addPhotoIconContainer.appendChild(addPhotoIcon);
+    addPhotoIcon.classList.add('fa-regular', 'fa-image', 'fa-4x', 'addPhotoIcon');
+
+    addPhotoSection.appendChild(addPhotoInput);
+    addPhotoSection.appendChild(addPhotoInputLabel);
+    addPhotoInput.classList.add('addPhotoInput');
+
+    // addPhotoInput.appendChild(addPhotoInputLabel);
+    addPhotoInputLabel.classList.add('addPhotoInputLabel');
+    addPhotoInputLabel.innerText = '+ Ajouter photo';
+    addPhotoInputLabel.classList.add('addPhotoInputLabel');
+    addPhotoInputLabel.setAttribute('for', 'addPhotoInput');
+    addPhotoInput.setAttribute('type', 'file');
+    addPhotoInput.setAttribute('name', 'addPhotoInput');
+    addPhotoInput.setAttribute('id', 'addPhotoInput');
+    addPhotoInput.setAttribute('accept', 'image/png, image/jpeg');
+
+    addPhotoSection.appendChild(addPhotoText);
+    addPhotoText.classList.add('addPhotoText');
+    addPhotoText.innerText = 'jpg, png: 4mo max';
+
+    section.appendChild(form);
+    form.classList.add('addPhotoForm');
+    form.appendChild(label);
+    label.classList.add('titleLabel');
+    label.innerText = 'Titre';
+    form.appendChild(input);
+    input.classList.add('titleInput');
+    input.setAttribute('type', 't/ext');
+    input.setAttribute('name', 'title');
+    form.appendChild(label2);
+    label2.classList.add('categoryLabel');
+    label2.innerText = 'Catégorie';
+    form.appendChild(input2);
+    input2.classList.add('categoryInput');
+    // input2.setAttribute('select', 'categories');
+    input2.setAttribute('name', 'category');
+    input2.setAttribute('id', 'categories');
+    // const datalist = document.createElement('datalist');
+    // form.appendChild(datalist);
+    // datalist.setAttribute('id', 'categories');
+    const defaultOption = document.createElement('option');
+    const Objects = document.createElement('option');
+    const Appartments = document.createElement('option');
+    const hostelsRestaurants = document.createElement('option');
+    defaultOption.setAttribute('value', 'defaultOption');
+    defaultOption.innerText = '';
+    Objects.setAttribute('value', 'Objects');
+    Objects.innerText = 'Objets';
+    Appartments.setAttribute('value', 'Appartments');
+    Appartments.innerText = 'Appartements';
+    hostelsRestaurants.setAttribute('value', 'hostelsRestaurants');
+    hostelsRestaurants.innerText = 'Hôtels et restaurants';
+    input2.appendChild(defaultOption);
+    input2.appendChild(Objects);
+    input2.appendChild(Appartments);
+    input2.appendChild(hostelsRestaurants);
+
+
+
+
+
+
+}
 
 //MAIN CALLS
 const works = await generateWorks();
