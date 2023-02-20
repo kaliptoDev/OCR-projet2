@@ -34,6 +34,7 @@ const fetchWorks = async (workId) => {
 }
 
 
+
 /**
  * @param {object} work 
  * @description generate a work element in the gallery
@@ -73,7 +74,6 @@ const generateWorks = async (workId) => {
 }
 
 /**
- * @param {null} none 
  * @description sets the display of the nav bar
  */
 const navUpdate = (parameter1, parameter2, parameter3, worksBoolean) => {
@@ -84,7 +84,6 @@ const navUpdate = (parameter1, parameter2, parameter3, worksBoolean) => {
 }
 
 /**
- * @param {null} none 
  * @description calls every setter functions
  */
 const setters = () => {
@@ -97,7 +96,6 @@ const setters = () => {
 }
 
 /**
- * @param {null} none 
  * @description calls every trigger functions
  */
 const triggers = () => {
@@ -109,10 +107,8 @@ const triggers = () => {
     triggerModalClose();
     triggerGalleryDeletion();
     applyChangesAdminBarTrigger();
-    // triggerModalGalleryDeletion();
 }
 /**
- * @param {null} none 
  * @description sets up the event listener for the filter buttons, and applied the filter
  */
 const triggerFilter = () => {
@@ -122,11 +118,9 @@ const triggerFilter = () => {
             generateWorks(parseInt(event.target.id.slice(5)))
         });
     }
-
 }
 
 /**
- * @param {null} none 
  * @description sets up the event listener for the contact button in nav
  */
 const triggerNavContact = () => {
@@ -140,7 +134,6 @@ const triggerNavContact = () => {
 
 }
 /**
- * @param {null} none 
  * @description sets up the event listener for the works button in nav
  */
 const triggerNavWork = () => {
@@ -153,7 +146,6 @@ const triggerNavWork = () => {
 }
 
 /**
- * @param {null} none 
  * @description sets up the event listener for the login button in nav
  */
 const triggerNavLogin = () => {
@@ -162,7 +154,6 @@ const triggerNavLogin = () => {
 
 }
 /**
- * @param {null} none 
  * @description gets you to the login page if you are not logged in, or logs you out if you are logged in
  */
 const triggerLogInorOut = () => {
@@ -194,7 +185,6 @@ const triggerGalleryDeletion = () => {
 }
 
 /**
- * @param {null} none 
  * @description updates the nav items
  */
 const loggedInDetection = () => {
@@ -212,7 +202,6 @@ const loggedInDetection = () => {
 }
 
 /**
- * @param {null} none 
  * @description shows the filters
  */
 const showFilters = () => {
@@ -222,7 +211,6 @@ const showFilters = () => {
 }
 
 /**
- * @param {null} none 
  * @description hides the filters
  */
 const hideFilters = () => {
@@ -232,7 +220,6 @@ const hideFilters = () => {
 }
 
 /**
- * @param {null} none 
  * @description shows the works and the introduction
  */
 const showWorks = () => {
@@ -256,7 +243,6 @@ const hideZone = (zone) => {
     document.querySelector(zone).style.display = 'none';
 }
 /**
- * @param {null} none 
  * @description shows the zone passed in parameter
  */
 const showZone = (zone) => {
@@ -264,7 +250,6 @@ const showZone = (zone) => {
 }
 
 /**
- * @param {null} none 
  * @description updates the admin bar depending on the user being logged in or not
  */
 const updateAdminBar = () => {
@@ -281,7 +266,6 @@ const updateAdminBar = () => {
     }
 }
 /**
- * @param {null} none 
  * @description updates the edit buttons depending on the user being logged in or not
  */
 const updateEditButtons = () => {
@@ -303,7 +287,6 @@ const updateEditButtons = () => {
 // setSessionStorage()
 
 /**
- * @param {null} none 
  * @description sets up the event listener for the modal to be displayed
  */
 const triggerModal = () => {
@@ -315,14 +298,15 @@ const triggerModalGalleryDeletion = () => {
     const trash = document.querySelectorAll('.modalImgTrash');
     console.warn(trash);
     trash.forEach(trashEl => {
+        console.log(trashEl)
         trashEl.addEventListener('click', () => {
             var id = trashEl.getAttribute('id');
             console.warn(id);
             id = id.slice(10);
             console.warn(id);
             deleteModalGalleryItem(id);
-            generateWorksModal();
             console.warn('trash clicked');
+
         })
     })
 }
@@ -337,14 +321,13 @@ const displayModal = () => {
     const modalBg = document.querySelector('.modalBg');
     modalBg.style.display = 'flex';
 
-    generateWorksModal();
     triggerModalGalleryDeletion();
+    generateWorksModal();
     triggerAddWorkToModal();
     triggerModalBack();
 }
 
 /**
- * @param {null} none 
  * @description generate the modal with all the works
  */
 const generateWorksModal = async () => {
@@ -368,14 +351,18 @@ const generateWorkModal = (work) => {
     const workElementFigure = document.createElement('figure');
     const workElementFigurediv = document.createElement("div");
     const workElementFigureImg = document.createElement("img");
-    const workCloseIcon = document.createElement("i");
+    const workDeleteIcon = document.createElement("i");
     const captionWork = document.createElement("figcaption");
 
     workElementFigure.setAttribute('id', `work_${work.id}`);
     workElementFigure.classList.add('modalFigure');
     workElementFigurediv.classList.add('modalImgContainer');
-    workCloseIcon.classList.add('fa-regular', 'fa-trash-can', 'modalImgTrash');
-    workCloseIcon.setAttribute('id', `workTrash_${work.id}`);
+    workDeleteIcon.classList.add('fa-regular', 'fa-trash-can', 'modalImgTrash');
+    workDeleteIcon.setAttribute('id', `workTrash_${work.id}`);
+    workDeleteIcon.onclick = () => {
+        deleteElement(work.id)
+        updateModalGallery();
+    } // évite les eventListener()
     captionWork.classList.add('modalFigcaption');
     workElementFigureImg.src = work.imageUrl;
     workElementFigureImg.crossOrigin = "anonymous";
@@ -384,7 +371,7 @@ const generateWorkModal = (work) => {
     document.querySelector('.modalGallery').setAttribute('isGallery', 'true');
     document.querySelector('.modalGallery').appendChild(workElementFigure);
     workElementFigure.appendChild(workElementFigurediv);
-    workElementFigurediv.appendChild(workCloseIcon);
+    workElementFigurediv.appendChild(workDeleteIcon);
     workElementFigurediv.appendChild(workElementFigureImg);
     workElementFigure.appendChild(captionWork);
 
@@ -392,7 +379,6 @@ const generateWorkModal = (work) => {
 }
 
 /**
- * @param {null} none 
  * @description Sets up the event listeners for the modal close
  */
 const triggerModalClose = () => {
@@ -403,7 +389,6 @@ const triggerModalClose = () => {
 }
 
 /**
- * @param {null} none 
  * @description Closes the ongoing modal
  */
 const closeModal = () => {
@@ -436,14 +421,25 @@ const createSessionStorage = async () => {
 const deleteModalGalleryItem = (workId) => {
     const workElement = document.querySelector(`#work_${workId}`);
     workElement.remove();
-    updateSessionStorage(workId);
+    updateAndRemoveSessionStorage(workId);
     generateWorksModal();
 }
 
-const updateSessionStorage = (workId) => {
+const updateAndRemoveSessionStorage = (workId) => {
     var works = utils.getSessionStorage();
-    works.splice(works.findIndex(work => work.id === workId), 1);
-    console.log(works);
+
+    // on veut retirer l'object dans le tableau works qui a l'id workId
+    // const newContent = works.reduce((acc, cur) => {
+    //     if(cur.id !== workId) {
+    //         acc.push(cur)
+    //     }
+    //     return acc
+    // }, [])
+
+    // on récupère tous les element qui ont un Id != de workId
+    const newContent = works.filter(el => el.id !== workId)
+
+    console.log(newContent)
 
     // const workIndex = works.findIndex(work => work.id === workId);
     // console.warn("workindex: " + workIndex);
@@ -452,7 +448,7 @@ const updateSessionStorage = (workId) => {
     // workstemp = works.filter(work => work.id !== workId);
     // console.warn(works.filter(work => work.id !== workId));
     deleteSessionStorage();
-    utils.setSessionStorage(works);
+    utils.setSessionStorage(newContent2);
     // console.warn(workstemp);
 }
 
@@ -482,7 +478,7 @@ const triggerAddWorkToModal = () => {
     const modalAddPhotoButton = document.querySelector('.addModalPhotoButton');
     modalAddPhotoButton.addEventListener('click', () => {
         displayNewWorkModal();
-
+        triggerSelectCategory();
     });
 }
 
@@ -521,24 +517,33 @@ const generateNewWorkModal = () => {
     const form = document.createElement('form');
     const input = document.createElement('input');
     const label = document.createElement('label');
-    const input2 = document.createElement('select');
-    const label2 = document.createElement('label');
-
+    const input2 = document.createElement('div');
+    // const label2 = document.createElement('label');
+    input2.classList.add('selectContainer');
+    input2.innerHTML = `
+    <div class="label categoryLabel">Catégorie</div>
+				<div class="select">
+					<div class="selected defaultOption" ><i class="fa-solid fa-angle-up"></i></div>
+					<div class="options hidden">
+						<div class="option optionObjects">Objets</div>
+						<div class="option optionAppartments">Appartements</div>
+						<div class="option optionRestaurants">Hôtels et restaurants</div>
+					</div>
+				</div>
+                `
     const section = document.querySelector('.modalGallery');
     section.setAttribute('isGallery', 'false');
     section.appendChild(addPhotoSection);
 
     addPhotoSection.classList.add('addPhotoSection');
     addPhotoSection.appendChild(addPhotoIcon);
-    // addPhotoIconContainer.classList.add('addPhotoIconContainer');
-    // addPhotoIconContainer.appendChild(addPhotoIcon);
+
     addPhotoIcon.classList.add('fa-regular', 'fa-image', 'fa-4x', 'addPhotoIcon');
 
     addPhotoSection.appendChild(addPhotoInput);
     addPhotoSection.appendChild(addPhotoInputLabel);
     addPhotoInput.classList.add('addPhotoInput');
 
-    // addPhotoInput.appendChild(addPhotoInputLabel);
     addPhotoInputLabel.classList.add('addPhotoInputLabel');
     addPhotoInputLabel.innerText = '+ Ajouter photo';
     addPhotoInputLabel.classList.add('addPhotoInputLabel');
@@ -561,39 +566,18 @@ const generateNewWorkModal = () => {
     input.classList.add('titleInput');
     input.setAttribute('type', 't/ext');
     input.setAttribute('name', 'title');
-    form.appendChild(label2);
-    label2.classList.add('categoryLabel');
-    label2.innerText = 'Catégorie';
+
     form.appendChild(input2);
-    input2.classList.add('categoryInput');
-    // input2.setAttribute('select', 'categories');
-    input2.setAttribute('name', 'category');
-    input2.setAttribute('id', 'categories');
-    // const datalist = document.createElement('datalist');
-    // form.appendChild(datalist);
-    // datalist.setAttribute('id', 'categories');
-    const defaultOption = document.createElement('option');
-    const Objects = document.createElement('option');
-    const Appartments = document.createElement('option');
-    const hostelsRestaurants = document.createElement('option');
-    defaultOption.setAttribute('value', 'defaultOption');
-    defaultOption.innerText = '';
-    Objects.setAttribute('value', 'Objects');
-    Objects.innerText = 'Objets';
-    Appartments.setAttribute('value', 'Appartments');
-    Appartments.innerText = 'Appartements';
-    hostelsRestaurants.setAttribute('value', 'hostelsRestaurants');
-    hostelsRestaurants.innerText = 'Hôtels et restaurants';
-    input2.appendChild(defaultOption);
-    input2.appendChild(Objects);
-    input2.appendChild(Appartments);
-    input2.appendChild(hostelsRestaurants);
+}
 
-
-
-
-
-
+const triggerSelectCategory = () => {
+    const select = document.querySelector('.select');
+    select.addEventListener('click', () => {
+        const input = document.querySelector('.options');
+        input.classList.toggle('hidden');
+        const selected = document.querySelector('.defaultOption');
+        selected.classList.toggle('isOpen');
+    })
 }
 
 //MAIN CALLS

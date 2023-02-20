@@ -1,6 +1,8 @@
 export const STORAGE_KEY = "user_token"
 export const SESSION_STORAGE_KEY = "temp_works"
 
+
+
 export const setStorage = (data) => {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
@@ -35,15 +37,35 @@ export const createUserJson = (email, password) => {
 
 }
 
-export const fetchAPI = async (url, method, payload) => {
+export const fetchAPIMultipart = async (url, method, payload) => {
+    let headers = {}
     if (method === 'DELETE') {
-        var headers = {
+        headers = {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + getStorage().token
+        };
+    } else {
+        headers = { 'Content-Type': 'multipart/form-data' };
+    }
+
+    const res = await fetch(url, {
+        method: method,
+        headers: headers,
+        body: payload || null
+    });
+    return res;
+
+}
+
+export const fetchAPI = async (url, method, payload) => {
+    let headers = {}
+    if (method === 'DELETE') {
+        headers = {
             'Content-Type': 'application/json;charset=utf-8',
             'Authorization': 'Bearer ' + getStorage().token
         };
     } else {
-        var headers = { 'Content-Type': 'application/json;charset=utf-8' };
-        // headersJSON = JSON.stringify(headersJSON);
+        headers = { 'Content-Type': 'application/json;charset=utf-8' };
     }
 
     const res = await fetch(url, {
@@ -58,7 +80,6 @@ export const fetchAPI = async (url, method, payload) => {
 export const resetFooter = () => {
     document.querySelector('body').classList.remove('loginPage');
     document.querySelector('footer').style.bottom = '';
-
 }
 
 export const deleteAllWorksFromDB = () => {
