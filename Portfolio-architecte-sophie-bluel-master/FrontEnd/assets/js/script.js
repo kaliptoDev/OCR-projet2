@@ -530,14 +530,17 @@ const generateNewWorkModal = () => {
     input2.innerHTML = `
     <div class="label categoryLabel">Catégorie</div>
 				<div class="select">
-					<div class="selected defaultOption" ><i class="fa-solid fa-angle-up"></i></div>
+					<div class="selected defaultOption" ><span class="selectedOption"></span><i class="fa-solid fa-angle-up selectorArrow"></i></div>
 					<div class="options hidden">
-						<div class="option optionObjects">Objets</div>
-						<div class="option optionAppartments">Appartements</div>
-						<div class="option optionRestaurants">Hôtels et restaurants</div>
+						<div id="option_1" class="option optionObjects" >Objets</div>
+						<div id="option_2" class="option optionAppartments" >Appartements</div>
+						<div id="option_3" class="option optionRestaurants" >Hôtels et restaurants</div>
 					</div>
 				</div>
                 `
+
+
+
     const section = document.querySelector('.modalGallery');
     section.setAttribute('isGallery', 'false');
     section.appendChild(addPhotoSection);
@@ -576,19 +579,35 @@ const generateNewWorkModal = () => {
 
     form.appendChild(input2);
 
+    const option1 = document.querySelector('#option_1');
+    const option2 = document.querySelector('#option_2');
+    const option3 = document.querySelector('#option_3');
+
+    option1.onclick = () => { updateSelected('1') }
+    option2.onclick = () => { updateSelected('2') }
+    option3.onclick = () => { updateSelected('3') }
+
     triggerPhotoInput();
 }
 
 const triggerSelectCategory = () => {
-    const select = document.querySelector('.select');
+    const select = document.querySelector('.defaultOption');
     select.addEventListener('click', () => {
         const input = document.querySelector('.options');
         input.classList.toggle('hidden');
-        const selected = document.querySelector('.defaultOption');
-        selected.classList.toggle('isOpen');
+        const arrow = document.querySelector('.selectorArrow');
+        arrow.classList.toggle('isOpen');
     })
 }
 
+const updateSelected = (id) => {
+    document.querySelector('.selectorArrow').classList.toggle('isOpen');
+    const selected = document.querySelector('.selectedOption');
+    const selectedOption = document.querySelector(`#option_${id}`);
+    selected.innerText = selectedOption.innerText;
+    const input = document.querySelector('.options');
+    input.classList.toggle('hidden');
+}
 
 function imagedata_to_image(imagedata) {
     var canvas = document.createElement('canvas');
@@ -614,59 +633,59 @@ const handleImageInput = () => {
 }
 
 const triggerModalConfirmNewWork = () => {
-    
+
 }
 
-    // const convertImageToBase64_2 = (imagedata) => {
-    //     var canvas = document.createElement('canvas');
-    //     var ctx = canvas.getContext('2d');
-    //     canvas.width = imagedata.width;
-    //     canvas.height = imagedata.height;
-    //     ctx.putImageData(imagedata, 0, 0);
+// const convertImageToBase64_2 = (imagedata) => {
+//     var canvas = document.createElement('canvas');
+//     var ctx = canvas.getContext('2d');
+//     canvas.width = imagedata.width;
+//     canvas.height = imagedata.height;
+//     ctx.putImageData(imagedata, 0, 0);
 
-    //     var image = new Image();
-    //     image.src = canvas.toDataURL();
-    //     return image;
-    // }
+//     var image = new Image();
+//     image.src = canvas.toDataURL();
+//     return image;
+// }
 
-    // const convertImageToBase64 = () => {
-    //     const input = document.querySelector('.addPhotoInput');
+// const convertImageToBase64 = () => {
+//     const input = document.querySelector('.addPhotoInput');
 
-    //     const file = input.files[0];
-    //     const fileReader = new FileReader();
-    //     fileReader.onload = function (e) {
-    //         const srcData = fileReader.result;
-    //         console.log(srcData);
-    //     }
-    //     fileReader.readAsDataURL(file);
-    //     return file;
-    // }
+//     const file = input.files[0];
+//     const fileReader = new FileReader();
+//     fileReader.onload = function (e) {
+//         const srcData = fileReader.result;
+//         console.log(srcData);
+//     }
+//     fileReader.readAsDataURL(file);
+//     return file;
+// }
 
-    const previewFile = () => {
-        const file = document.querySelector('input[type=file]').files[0];
-        const reader = new FileReader();
+const previewFile = () => {
+    const file = document.querySelector('input[type=file]').files[0];
+    const reader = new FileReader();
 
-        reader.addEventListener("load", function () {
-            const section = document.querySelector('.addPhotoSection') 
-            section.querySelector('i').style.display = 'none';
-            section.querySelector('span').style.display = 'none';
-            section.querySelector('label').style.display = 'none';
-            const img = document.createElement('img');
-            img.classList.add('addPhotoPreview');
-            section.appendChild(img);
-            img.src = reader.result;
-        });
-        
-        if (file) {
-            reader.readAsDataURL(file);
-        }
+    reader.addEventListener("load", function () {
+        const section = document.querySelector('.addPhotoSection')
+        section.querySelector('i').style.display = 'none';
+        section.querySelector('span').style.display = 'none';
+        section.querySelector('label').style.display = 'none';
+        const img = document.createElement('img');
+        img.classList.add('addPhotoPreview');
+        section.appendChild(img);
+        img.src = reader.result;
+    });
 
+    if (file) {
+        reader.readAsDataURL(file);
     }
 
+}
 
 
-    //MAIN CALLS
-    const works = await generateWorks();
-    setters();
+
+//MAIN CALLS
+const works = await generateWorks();
+setters();
 
 
