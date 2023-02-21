@@ -62,12 +62,7 @@ const login = async (email, password) => {
             } else if (response.status === 200) {
                 const data = await response.json();
                 utils.setStorage(data);
-                document.querySelector('.error_login').style.display = 'block';
-                document.querySelector('.error_login').innerText = `Connecté avec succès en tant de ${email}, redirection`;
-                setTimeout(() => {
-                    document.querySelector('.error_login').style.display = 'none';
-                    window.location.href = '../index.html';
-                }, 3000);
+                document.querySelector('.error_login').style.display = 'none';
             }
 
         } catch (error) {

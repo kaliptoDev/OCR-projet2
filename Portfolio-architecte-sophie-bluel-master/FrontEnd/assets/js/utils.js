@@ -106,3 +106,15 @@ export const deleteAllWorksFromDB = () => {
 }
 
 export const updateAllWorksToDB = () => {}
+
+export const generateId = () => {
+    const works = getSessionStorage();
+    let id = 0;
+    works.forEach(work => {
+        if (work.id > id) {
+            id = work.id;
+        }
+    });
+    id++;
+    return id;
+}
