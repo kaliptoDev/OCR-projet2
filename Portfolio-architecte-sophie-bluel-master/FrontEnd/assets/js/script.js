@@ -311,6 +311,19 @@ const triggerModalGalleryDeletion = () => {
     })
 }
 
+// displayModal();
+//         const modalH2 = document.querySelector('.modalH2');
+//         modalH2.innerText = 'Galerie photo';
+//         const modalAddAPhotoButton = document.querySelector('.addModalPhotoButton');
+//         modalAddAPhotoButton.style.display = 'block';
+//         const modalDeleteGallery = document.querySelector('.modalDeleteGallery');
+//         modalDeleteGallery.style.display = 'block';
+//         const modalConfirmNewWork = document.querySelector('.modalConfirmNewPhotoButton');
+//         modalConfirmNewWork.style.display = 'none';
+//         document.querySelector('.modalBackButton').style.display = 'none';
+
+
+
 /**
 * @param {null} none 
 * @description display the modal
@@ -320,7 +333,16 @@ const displayModal = () => {
     modal.style.display = 'flex';
     const modalBg = document.querySelector('.modalBg');
     modalBg.style.display = 'flex';
-
+    const modalH2 = document.querySelector('.modalH2');
+    modalH2.innerText = 'Galerie photo';
+    const modalConfirmNewWork = document.querySelector('.modalConfirmNewPhotoButton');
+    modalConfirmNewWork.style.display = 'none';
+    const modalAddAPhotoButton = document.querySelector('.addModalPhotoButton');
+    modalAddAPhotoButton.style.display = 'block';
+    const modalDeleteGallery = document.querySelector('.modalDeleteGallery');
+    modalDeleteGallery.style.display = 'block';
+    document.querySelector('.modalBackButton').style.display = 'none';
+    
     triggerModalGalleryDeletion();
     generateWorksModal();
     triggerAddWorkToModal();
@@ -491,18 +513,7 @@ const triggerAddWorkToModal = () => {
 
 const triggerModalBack = () => {
     const modalBackButton = document.querySelector('.modalBackButton');
-    modalBackButton.addEventListener('click', () => {
-        displayModal();
-        const modalH2 = document.querySelector('.modalH2');
-        modalH2.innerText = 'Galerie photo';
-        const modalAddAPhotoButton = document.querySelector('.addModalPhotoButton');
-        modalAddAPhotoButton.style.display = 'block';
-        const modalDeleteGallery = document.querySelector('.modalDeleteGallery');
-        modalDeleteGallery.style.display = 'block';
-        const modalConfirmNewWork = document.querySelector('.modalConfirmNewPhotoButton');
-        modalConfirmNewWork.style.display = 'none';
-        document.querySelector('.modalBackButton').style.display = 'none';
-    });
+    modalBackButton.addEventListener('click', displayModal);
 }
 
 const displayNewWorkModal = () => {
@@ -512,6 +523,9 @@ const displayNewWorkModal = () => {
     document.querySelector('.modalBackButton').style.display = 'block';
     changeModalButtons();
     generateNewWorkModal();
+    const title = document.querySelector('.titleInput');
+    title.addEventListener('input', () => checkIfNewWorkComplete());
+
 }
 
 const generateNewWorkModal = () => {
@@ -574,7 +588,7 @@ const generateNewWorkModal = () => {
     label.innerText = 'Titre';
     form.appendChild(input);
     input.classList.add('titleInput');
-    input.setAttribute('type', 't/ext');
+    input.setAttribute('type', 'text');
     input.setAttribute('name', 'title');
 
     form.appendChild(input2);
@@ -597,6 +611,7 @@ const triggerSelectCategory = () => {
         input.classList.toggle('hidden');
         const arrow = document.querySelector('.selectorArrow');
         arrow.classList.toggle('isOpen');
+        checkIfNewWorkComplete();
     })
 }
 
@@ -607,6 +622,7 @@ const updateSelected = (id) => {
     selected.innerText = selectedOption.innerText;
     const input = document.querySelector('.options');
     input.classList.toggle('hidden');
+    checkIfNewWorkComplete();
 }
 
 function imagedata_to_image(imagedata) {
@@ -627,14 +643,13 @@ const triggerPhotoInput = () => {
     // const preview = document.querySelector('.addPhotoSection');
 }
 
+
+
 const handleImageInput = () => {
     previewFile();
-
+    checkIfNewWorkComplete();
 }
 
-const triggerModalConfirmNewWork = () => {
-
-}
 
 // const convertImageToBase64_2 = (imagedata) => {
 //     var canvas = document.createElement('canvas');
@@ -674,16 +689,55 @@ const previewFile = () => {
         img.classList.add('addPhotoPreview');
         section.appendChild(img);
         img.src = reader.result;
+        checkIfNewWorkComplete();
     });
 
     if (file) {
         reader.readAsDataURL(file);
     }
+}
+
+const checkIfNewWorkComplete = () => {
+    const title = document.querySelector('.titleInput').value;
+    console.log(title);
+    const category = document.querySelector('.selectedOption').innerText;
+    console.log(category);
+    const img = document.querySelector('.addPhotoPreview');
+    console.log(img);
+    if (title && category && img) {
+        updateValidateButton(true);
+    }
+    else {
+        updateValidateButton(false);
+    }
 
 }
 
+const updateValidateButton = (isComplete) => {
+    const button = document.querySelector('.modalConfirmNewPhotoButton');
+    if (isComplete) {
+        button.setAttribute('allowed', true);
+        triggerValidateButton();
+    }
+    else {
+        button.setAttribute('allowed', false);
+        removeListenerFromButton();
+    }
+}
 
+const removeListenerFromButton = () => {
+    const button = document.querySelector('.modalConfirmNewPhotoButton');
+    button.removeEventListener('click', triggerModalConfirmNewWork);
+}
 
+const triggerValidateButton = () => {
+    const button = document.querySelector('.modalConfirmNewPhotoButton');
+    button.addEventListener('click', triggerModalConfirmNewWork);
+}
+
+const triggerModalConfirmNewWork = () => {
+    console.warn('triggerModalConfirmNewWork');
+}
 //MAIN CALLS
 const works = await generateWorks();
 setters();
