@@ -360,7 +360,8 @@ const generateWorkModal = (work) => {
     workDeleteIcon.classList.add('fa-regular', 'fa-trash-can', 'modalImgTrash');
     workDeleteIcon.setAttribute('id', `workTrash_${work.id}`);
     workDeleteIcon.onclick = () => {
-        deleteElement(work.id)
+        // deleteElement(work.id);
+        deleteModalGalleryItem(work.id);
         updateModalGallery();
     } // évite les eventListener()
     captionWork.classList.add('modalFigcaption');
@@ -377,6 +378,10 @@ const generateWorkModal = (work) => {
 
     // workCloseIcon.addEventListener('click', () => deleteWork(work.id));
 }
+
+// const updateModalGallery = () => {}
+
+// const deleteElement = (id) => {}
 
 /**
  * @description Sets up the event listeners for the modal close
@@ -447,8 +452,10 @@ const updateAndRemoveSessionStorage = (workId) => {
     // var workstemp = [];
     // workstemp = works.filter(work => work.id !== workId);
     // console.warn(works.filter(work => work.id !== workId));
-    deleteSessionStorage();
-    utils.setSessionStorage(newContent2);
+    utils.deleteSessionStorage();
+    utils.setSessionStorage(newContent);
+    // updateModalGallery();
+    generateWorksModal();
     // console.warn(workstemp);
 }
 
@@ -568,6 +575,8 @@ const generateNewWorkModal = () => {
     input.setAttribute('name', 'title');
 
     form.appendChild(input2);
+
+    triggerPhotoInput();
 }
 
 const triggerSelectCategory = () => {
@@ -580,8 +589,84 @@ const triggerSelectCategory = () => {
     })
 }
 
-//MAIN CALLS
-const works = await generateWorks();
-setters();
+
+function imagedata_to_image(imagedata) {
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    canvas.width = imagedata.width;
+    canvas.height = imagedata.height;
+    ctx.putImageData(imagedata, 0, 0);
+
+    var image = new Image();
+    image.src = canvas.toDataURL();
+    return image;
+}
+
+const triggerPhotoInput = () => {
+    const input = document.querySelector('.addPhotoInput');
+    input.addEventListener('change', handleImageInput);
+    // const preview = document.querySelector('.addPhotoSection');
+}
+
+const handleImageInput = () => {
+    previewFile();
+
+}
+
+const triggerModalConfirmNewWork = () => {
+    
+}
+
+    // const convertImageToBase64_2 = (imagedata) => {
+    //     var canvas = document.createElement('canvas');
+    //     var ctx = canvas.getContext('2d');
+    //     canvas.width = imagedata.width;
+    //     canvas.height = imagedata.height;
+    //     ctx.putImageData(imagedata, 0, 0);
+
+    //     var image = new Image();
+    //     image.src = canvas.toDataURL();
+    //     return image;
+    // }
+
+    // const convertImageToBase64 = () => {
+    //     const input = document.querySelector('.addPhotoInput');
+
+    //     const file = input.files[0];
+    //     const fileReader = new FileReader();
+    //     fileReader.onload = function (e) {
+    //         const srcData = fileReader.result;
+    //         console.log(srcData);
+    //     }
+    //     fileReader.readAsDataURL(file);
+    //     return file;
+    // }
+
+    const previewFile = () => {
+        const file = document.querySelector('input[type=file]').files[0];
+        const reader = new FileReader();
+
+        reader.addEventListener("load", function () {
+            const section = document.querySelector('.addPhotoSection') 
+            section.querySelector('i').style.display = 'none';
+            section.querySelector('span').style.display = 'none';
+            section.querySelector('label').style.display = 'none';
+            const img = document.createElement('img');
+            img.classList.add('addPhotoPreview');
+            section.appendChild(img);
+            img.src = reader.result;
+        });
+        
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+
+    }
+
+
+
+    //MAIN CALLS
+    const works = await generateWorks();
+    setters();
 
 
