@@ -1,7 +1,7 @@
 // import { setStorage, getStorage, createUserJson, deleteStorage, STORAGE_KEY, resetFooter } from './index.js'
 // import * from './utils.js'
 import * as utils from './index.js'
-import { deleteSessionStorage } from './index.js';
+import { deleteSessionStorage, getSessionStorage } from './index.js';
 // import { setSessionStorage } from './index.js';
 
 // import { setStorage, getStorage, createUserJson, deleteStorage, STORAGE_KEY, resetFooter } from './index.js'
@@ -57,13 +57,35 @@ const generateWork = (work) => {
 
 }
 
+const generateWorksFromSession = () => {
+    const works = getSessionStorage();
+    document.querySelector('.gallery').innerHTML = '';
+
+    for (let work of works) {
+        generateWork(work);
+    }
+}
 /**
  * @param {Int} workId 
  * @description generate all the works in the gallery, depending on the filter or not
  */
 const generateWorks = async (workId) => {
-    const works = await fetchWorks(workId);
 
+    // const data = await reponse.json();
+    // console.log(data);
+    // if (workId > 0) {
+    //     return data.filter(work => work.categoryId === workId);
+    // }
+    let works = [];
+
+    if (!utils.getSessionStorage()) {
+    works = await fetchWorks(workId);
+    } else {
+        works = getSessionStorage();
+        if (workId > 0) {
+            works = works.filter(work => work.categoryId === workId);
+        }
+    }
     document.querySelector('.gallery').innerHTML = '';
 
     for (let work of works) {
@@ -163,6 +185,7 @@ const triggerLogInorOut = () => {
         utils.deleteSessionStorage();
         navUpdate('600', '400', '400', 'none', true);
         showFilters();
+        generateWorks();
     }
     else {
         window.location.href = 'login/index.html'
@@ -196,6 +219,7 @@ const loggedInDetection = () => {
         const token = utils.getStorage(utils.STORAGE_KEY).token;
         console.log(`token = ${token}`);
         hideFilters();
+        
     } else {
         showFilters();
     }
@@ -294,22 +318,22 @@ const triggerModal = () => {
     modal.addEventListener('click', () => displayModal());
 }
 
-const triggerModalGalleryDeletion = () => {
-    const trash = document.querySelectorAll('.modalImgTrash');
-    console.warn(trash);
-    trash.forEach(trashEl => {
-        console.log(trashEl)
-        trashEl.addEventListener('click', () => {
-            var id = trashEl.getAttribute('id');
-            console.warn(id);
-            id = id.slice(10);
-            console.warn(id);
-            deleteModalGalleryItem(id);
-            console.warn('trash clicked');
+// const triggerModalGalleryDeletion = () => {
+//     const trash = document.querySelectorAll('.modalImgTrash');
+//     console.warn(trash);
+//     trash.forEach(trashEl => {
+//         console.log(trashEl)
+//         trashEl.addEventListener('click', () => {
+//             var id = trashEl.getAttribute('id');
+//             console.warn(id);
+//             id = id.slice(10);
+//             console.warn(id);
+//             deleteModalGalleryItem(id);
+//             console.warn('trash clicked');
 
-        })
-    })
-}
+//         })
+//     })
+// }
 
 // displayModal();
 //         const modalH2 = document.querySelector('.modalH2');
@@ -342,8 +366,8 @@ const displayModal = () => {
     const modalDeleteGallery = document.querySelector('.modalDeleteGallery');
     modalDeleteGallery.style.display = 'block';
     document.querySelector('.modalBackButton').style.display = 'none';
-    
-    triggerModalGalleryDeletion();
+
+    // triggerModalGalleryDeletion();
     generateWorksModal();
     triggerAddWorkToModal();
     triggerModalBack();
@@ -370,6 +394,8 @@ const generateWorksModal = async () => {
  */
 const generateWorkModal = (work) => {
 
+    
+
     const workElementFigure = document.createElement('figure');
     const workElementFigurediv = document.createElement("div");
     const workElementFigureImg = document.createElement("img");
@@ -384,9 +410,10 @@ const generateWorkModal = (work) => {
     workDeleteIcon.onclick = () => {
         // deleteElement(work.id);
         deleteModalGalleryItem(work.id);
-        updateModalGallery();
+
     } // évite les eventListener()
     captionWork.classList.add('modalFigcaption');
+    console.log(work);
     workElementFigureImg.src = work.imageUrl;
     workElementFigureImg.crossOrigin = "anonymous";
     workElementFigureImg.setAttribute('alt', work.title);
@@ -450,6 +477,7 @@ const deleteModalGalleryItem = (workId) => {
     workElement.remove();
     updateAndRemoveSessionStorage(workId);
     generateWorksModal();
+    generateWorksFromSession()
 }
 
 const updateAndRemoveSessionStorage = (workId) => {
@@ -735,9 +763,41 @@ const triggerValidateButton = () => {
     button.addEventListener('click', triggerModalConfirmNewWork);
 }
 
-const triggerModalConfirmNewWork = () => {
-    console.warn('triggerModalConfirmNewWork');
+const pushWorkIntoSessionStorage = () => {
+    const id = utils.generateId();
+    const title = document.querySelector('.titleInput').value;
+    const category = document.querySelector('.selectedOption').innerText;
+    let categoryId = 0;
+    if (category === 'Objets') {
+        categoryId = 1;
+    } else if (category === 'Appartements') {
+        categoryId = 2;
+    } else if (category === 'Hôtels et restaurants') {
+        categoryId = 3;
+    }
+
+    let works = getSessionStorage();
+    const newWork = {
+        id: id,
+        title: title,
+        categoryId: categoryId,
+        category: category,
+        imageUrl: document.querySelector('.addPhotoPreview').src
+    }
+
+    works.push(newWork);
+    utils.deleteSessionStorage();
+    utils.setSessionStorage(works);
+
 }
+
+const triggerModalConfirmNewWork = () => {
+    pushWorkIntoSessionStorage();
+    displayModal();
+    generateWorks();
+}
+
+
 //MAIN CALLS
 const works = await generateWorks();
 setters();
