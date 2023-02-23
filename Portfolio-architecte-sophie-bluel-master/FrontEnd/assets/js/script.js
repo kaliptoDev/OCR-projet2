@@ -1,7 +1,7 @@
 // import { setStorage, getStorage, createUserJson, deleteStorage, STORAGE_KEY, resetFooter } from './index.js'
 // import * from './utils.js'
 import * as utils from './index.js'
-import { deleteSessionStorage, getSessionStorage } from './index.js';
+import { deleteSessionStorage, fetchAPIMultipart, getSessionStorage } from './index.js';
 // import { setSessionStorage } from './index.js';
 
 // import { setStorage, getStorage, createUserJson, deleteStorage, STORAGE_KEY, resetFooter } from './index.js'
@@ -79,7 +79,7 @@ const generateWorks = async (workId) => {
     let works = [];
 
     if (!utils.getSessionStorage()) {
-    works = await fetchWorks(workId);
+        works = await fetchWorks(workId);
     } else {
         works = getSessionStorage();
         if (workId > 0) {
@@ -219,7 +219,7 @@ const loggedInDetection = () => {
         const token = utils.getStorage(utils.STORAGE_KEY).token;
         console.log(`token = ${token}`);
         hideFilters();
-        
+
     } else {
         showFilters();
     }
@@ -394,7 +394,7 @@ const generateWorksModal = async () => {
  */
 const generateWorkModal = (work) => {
 
-    
+
 
     const workElementFigure = document.createElement('figure');
     const workElementFigurediv = document.createElement("div");
@@ -515,7 +515,7 @@ const applyChangesAdminBarTrigger = () => {
         const works = utils.getSessionStorage();
         if (works === null) deleteAllWorksFromDB();
         else {
-            utils.updateAllWorksToDB(works);
+            updateAllWorksToDB(works);
         }
     })
 }
@@ -797,9 +797,109 @@ const triggerModalConfirmNewWork = () => {
     generateWorks();
 }
 
+const imageUrlToBase64 = async url => {
+    try {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        return new Promise( () => {
+            try {
+                const reader = new FileReader();
+                reader.onload = function () { console.log(this.result) };
+                reader.readAsDataURL(blob);
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    } catch (e) { console.log(e) }
 
+}
+
+// const convertUrlIntoBase64 =  (url) => {
+// let finalData;
+// const xhr = new XMLHttpRequest();
+// xhr.open('GET', url, true);
+// xhr.responseType = 'blob';
+// xhr.onload = function (e) {
+//     if (this.status == 200) {
+//         var myBlob = this.response;
+//         var reader = new FileReader();
+//         reader.readAsDataURL(myBlob);
+//         reader.onloadend = function () {
+//             var base64data = reader.result;
+//         }
+//     }
+// };
+// xhr.send();
+// return finalData;
+
+// let finalData = fetch(url)
+// .then(async res => {
+//     let imageBlob = await res.blob();
+//     let reader = new FileReader();
+//     reader.readAsDataURL(imageBlob);
+//     reader.onloadend = function () {
+//         let base64data = reader.result;
+//         console.log(base64data);
+//         return base64data;
+//     }
+// })
+// .catch(err => {
+//     console.log(err);
+// });
+// return finalData;
+
+
+
+// }
+
+const updateAllWorksToDB = () => {
+    const works = getSessionStorage();
+    works.forEach(async work => {
+        const url = work.imageUrl;
+        const imgUrl = await imageUrlToBase64(url);
+        console.log(imgUrl);
+        let payload = {
+            title: work.title,
+            categoryId: work.categoryId,
+            image: imgUrl
+        }
+        console.log(payload);
+        try {
+            const res = fetchAPIMultipart('http://localhost:5678/api/works', 'POST', payload)
+            console.log(res);
+        } catch (e) {
+            console.log(e);
+        }
+
+    });
+    // convertSessionStorageImageUrlIntoBase64();
+}
+
+// const convertSessionStorageImageUrlIntoBase64 = (url, id) => {
+//     const works = getSessionStorage();
+//     console.log(works);
+//     for (let work of works) {
+//         if (work.id === id) {
+//             work.imageUrl = url;
+//         }
+//     }
+//     // works.forEach(work => {
+//     //     if(work.id === id){
+//     //         work.imageUrl = url;
+//     //     }
+//     // });
+//     utils.deleteSessionStorage();
+//     utils.setSessionStorage(works);
+
+// }
 //MAIN CALLS
 const works = await generateWorks();
 setters();
 
+const cle = document;
+cle.addEventListener('keyup', (e) => {
+    if (e.key === 'Escape') {
+        console.log('escape');
+    }
+});
 

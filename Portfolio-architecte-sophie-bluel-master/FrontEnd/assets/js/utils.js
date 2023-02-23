@@ -39,18 +39,22 @@ export const createUserJson = (email, password) => {
 
 export const fetchAPIMultipart = async (url, method, payload) => {
     let headers = {}
-    if (method === 'DELETE') {
+    if (method === 'DELETE' || method === 'POST') {
         headers = {
-            'Content-Type': 'multipart/form-data',
+            'Content-Type': 'multipart/form-data;',
+            // 'accept': 'application/json',
             'Authorization': 'Bearer ' + getStorage().token
         };
     } else {
-        headers = { 'Content-Type': 'multipart/form-data' };
+        console.warn('Methode inexistante ou non reconnue');
+        console.warn('Méthode utilisée: ' + method || 'Aucune');
+        console.warn('Méthodes acceptées: DELETE, POST');
+        console.warn('Fetch non accompli');
     }
 
     const res = await fetch(url, {
         method: method,
-        headers: headers,
+        headers: headers || null,
         body: payload || null
     });
     return res;
@@ -105,7 +109,7 @@ export const deleteAllWorksFromDB = () => {
     }
 }
 
-export const updateAllWorksToDB = () => {}
+// export const updateAllWorksToDB = () => {}
 
 export const generateId = () => {
     const works = getSessionStorage();

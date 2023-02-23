@@ -265,6 +265,12 @@ nav li:hover {
 
 .work {
 	transition: ease-in-out 0.2s;
+	height : 490px;
+}
+
+.work img{
+	height: 100%;
+	object-fit: cover;
 }
 
 .work:hover {
@@ -364,14 +370,14 @@ nav li:hover {
 	width: 100%;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
-	grid-column-gap: 20px;
-	grid-row-gap: 20px;
+	grid-column-gap: 25px;
+	grid-row-gap: 40px;
 	margin: 50px 0;
 }
 
 .gallery img {
 	width: 100%;
-
+	margin: 0 0 5px 0;
 }
 
 .gallery figcaption {
