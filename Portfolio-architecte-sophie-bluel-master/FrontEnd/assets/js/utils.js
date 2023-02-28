@@ -10,21 +10,21 @@ export const getStorage = () => {
     return JSON.parse(window.localStorage.getItem(STORAGE_KEY));
 }
 
-export const setSessionStorage = (data) => {
-    sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(data));
-}
-
-export const getSessionStorage = () => {
-    return JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY));
-}
-
-export const deleteSessionStorage = () => {
-    sessionStorage.removeItem(SESSION_STORAGE_KEY);
-}
-
 export const deleteStorage = () => {
     window.localStorage.removeItem(STORAGE_KEY);
 }
+// export const setSessionStorage = (data) => {
+//     sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(data));
+// }
+
+// export const getSessionStorage = () => {
+//     return JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY));
+// }
+
+// export const deleteSessionStorage = () => {
+//     sessionStorage.removeItem(SESSION_STORAGE_KEY);
+// }
+
 
 export const createUserJson = (email, password) => {
 
