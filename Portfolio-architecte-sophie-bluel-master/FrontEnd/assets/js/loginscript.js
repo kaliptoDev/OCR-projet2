@@ -65,7 +65,7 @@ const login = async (email, password) => {
                     const data = await response.json();
                     utils.setStorage(data);
                     document.querySelector('.error_login').style.display = 'none';
-                    window.location.href = '../index.html';
+                    window.location.href = '../';
                 }
 
             } catch (error) {

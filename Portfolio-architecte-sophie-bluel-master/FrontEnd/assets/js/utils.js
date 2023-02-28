@@ -90,19 +90,39 @@ export const deleteAllWorksFromDB = () => {
     try {
         const works = getSessionStorage();
         works.forEach(work => {
-            const reponse = fetchAPI(`http://localhost:5678/api/works/${work.id}`, 'DELETE', null);
-            if (reponse.status === 200) {
-                console.log('work deleted');
-            } else if (reponse.status === 401) {
-                console.log('Unauthorized');
-                throw new Error('Unauthorized');
-            }
-            else if (reponse.status === 500) {
-                console.log('Unexepected behaviour');
-                throw new Error('Unexepected behaviour');
-            }
+            // const reponse = fetchAPI(`http://localhost:5678/api/works/${work.id}`, 'DELETE', null);
+            // if (reponse.status === 200) {
+            //     console.log('work deleted');
+            // } else if (reponse.status === 401) {
+            //     console.log('Unauthorized');
+            //     throw new Error('Unauthorized');
+            // }
+            // else if (reponse.status === 500) {
+            //     console.log('Unexepected behaviour');
+            //     throw new Error('Unexepected behaviour');
+            // }
+            deleteWorkFromDB(work.id);
         });
 
+    } catch (error) {
+        console.log(error);
+        alert('Une erreur est survenue, veuillez réessayer. Erreur: ' + error);
+    }
+}
+
+export const deleteWorkFromDB = (id) => {
+    try {
+        const reponse = fetchAPI(`http://localhost:5678/api/works/${id}`, 'DELETE', null);
+        if (reponse.status === 200) {
+            console.log('work deleted');
+        } else if (reponse.status === 401) {
+            console.log('Unauthorized');
+            throw new Error('Unauthorized');
+        }
+        else if (reponse.status === 500) {
+            console.log('Unexepected behaviour');
+            throw new Error('Unexepected behaviour');
+        }
     } catch (error) {
         console.log(error);
         alert('Une erreur est survenue, veuillez réessayer. Erreur: ' + error);
