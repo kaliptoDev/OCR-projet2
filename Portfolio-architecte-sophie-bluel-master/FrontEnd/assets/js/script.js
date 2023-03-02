@@ -382,6 +382,12 @@ const displayWorksModal = async () => {
     const gallery = document.querySelector('.modalGallery');
     for (let work of works) {
         gallery.appendChild(generateWorkModal(work));
+        const workTrash = document.querySelector(`#workTrash_${work.id}`);
+        workTrash.addEventListener('click', () => {
+            deleteModalGalleryItem(work.id);
+            updateModal();
+            displayWorksInMainGallery();
+        });
     }
 }
 
@@ -398,11 +404,11 @@ const generateWorkModal = (work) => {
     workElementFigurediv.classList.add('modalImgContainer');
     workDeleteIcon.classList.add('fa-regular', 'fa-trash-can', 'modalImgTrash');
     workDeleteIcon.setAttribute('id', `workTrash_${work.id}`);
-    workDeleteIcon.onclick = () => {
-        deleteModalGalleryItem(work.id);
-        updateModal();
-        displayWorksInMainGallery();
-    }
+    // workDeleteIcon.onclick = () => {
+    //     deleteModalGalleryItem(work.id);
+    //     updateModal();
+    //     displayWorksInMainGallery();
+    // }
     captionWork.classList.add('modalFigcaption');
     workElementFigureImg.src = work.imageUrl;
     workElementFigureImg.crossOrigin = "anonymous";
@@ -417,10 +423,28 @@ const generateWorkModal = (work) => {
     return workElementFigure;
 }
 
-const deleteModalGalleryItem = (workId) => {
+const deleteModalGalleryItem = async (workId) => {
     const workElement = document.querySelector(`#work_${workId}`);
     workElement.remove();
+
     utils.deleteWorkFromDB(workId);
+
+    // try {
+    //     const reponse = await utils.deleteWorkFromDB(workId);
+    //     console.log(reponse);
+
+    //     if (!reponse.ok){ 
+    //         console.log(reponse.json())
+    //         throw new Error(reponse.status);
+    // }
+    //     else {
+    //         console.log('oeuvre supprimée');
+    //     }
+    // }
+    // catch (error) {
+    //     console.log(error);
+    //     alert('Erreur lors de la suppression de l\'oeuvre');
+    // }
 }
 
 

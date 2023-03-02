@@ -65,6 +65,10 @@ export const fetchAPI = async (url, method, payload) => {
         headers: headers,
         body: payload || null
     });
+    console.log(res);
+    if(method=== "DELETE"){
+        setTimeout(() => {return res}, 5000);
+    }
     return res;
 
 }
@@ -79,7 +83,8 @@ export const  deleteAllWorksFromDB = async () => {
         const reponse = await fetchAPI('http://localhost:5678/api/works', 'GET', null);
         if (reponse.status === 200) {
             const works = await reponse.json();
-            works.forEach(work => {
+            works.forEach(work =>{
+                
                 deleteWorkFromDB(work.id);
             })
         } else {
@@ -92,9 +97,9 @@ export const  deleteAllWorksFromDB = async () => {
     }
 }
 
-export const deleteWorkFromDB = (id) => {
+export const deleteWorkFromDB = async (id) => {
     try {
-        const reponse = fetchAPI(`http://localhost:5678/api/works/${id}`, 'DELETE', null);
+        const reponse = await fetchAPI(`http://localhost:5678/api/works/${id}`, 'DELETE');
         if (reponse.status === 200) {
             console.log('work deleted');
         } else if (reponse.status === 401) {
@@ -109,6 +114,7 @@ export const deleteWorkFromDB = (id) => {
         console.log(error);
         alert('Une erreur est survenue, veuillez réessayer. Erreur: ' + error);
     }
+    
 }
 
 // export const generateId = () => {
