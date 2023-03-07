@@ -29,8 +29,6 @@ export const fetchAPIMultipart = async (url, method, payload) => {
     let headers = {}
     if (method === 'DELETE' || method === 'POST') {
         headers = {
-            // 'Content-Type': 'multipart/form-data;',
-            // 'accept': 'application/json',
             'Authorization': 'Bearer ' + getStorage().token
         };
     } else {
@@ -116,16 +114,4 @@ export const deleteWorkFromDB = async (id) => {
     }
     
 }
-
-// export const generateId = () => {
-//     const works = getSessionStorage();
-//     let id = 0;
-//     works.forEach(work => {
-//         if (work.id > id) {
-//             id = work.id;
-//         }
-//     });
-//     id++;
-//     return id;
-// }
 

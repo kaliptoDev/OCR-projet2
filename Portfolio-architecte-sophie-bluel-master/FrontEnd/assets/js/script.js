@@ -1,7 +1,6 @@
-// import { setStorage, getStorage, createUserJson, deleteStorage, STORAGE_KEY, resetFooter } from './index.js'
-// import * from './utils.js'
+
 import * as utils from './index.js'
-import {fetchAPIMultipart } from './index.js';
+import { fetchAPIMultipart } from './index.js';
 
 /**
  * @param {object} work 
@@ -74,8 +73,9 @@ const triggerModalClose = () => {
 const triggerGalleryDeletion = () => {
     const galleryDelete = document.querySelector('.modalDeleteGallery');
     galleryDelete.addEventListener('click', async () => {
-        utils.deleteAllWorksFromDB();
-        updateModal();
+        await utils.deleteAllWorksFromDB();
+        document.querySelector('.modalGallery').innerHTML = '';
+        document.querySelector('.gallery').innerHTML = '';
     });
 }
 
@@ -97,7 +97,6 @@ const closeModal = () => {
 const openAndUpdateModal = () => {
     displayModal();
     triggersInsideModal();
-
 }
 
 
@@ -120,9 +119,9 @@ const displayModal = () => {
 
 }
 
-const updateModal = () => {
-    displayWorksModal();
+const updateModal = async () => {
     updateDisplayModal();
+    await displayWorksModal();
 }
 
 const updateDisplayModal = () => {
@@ -244,8 +243,8 @@ const removeListenerFromButton = () => {
     button.removeEventListener('click', triggerModalConfirmNewWork);
 }
 
-const triggerModalConfirmNewWork = () => {
-    pushWorkIntoDB();
+const triggerModalConfirmNewWork = async () => {
+    await pushWorkIntoDB();
     updateModal();
     displayWorksInMainGallery();
 }
@@ -267,7 +266,6 @@ const pushWorkIntoDB = async () => {
     data.append('image', file);
     data.append('category', categoryId);
 
-    // console.log(document.querySelector('.addPhotoInput').files[0])
     console.log(await fetchAPIMultipart('http://localhost:5678/api/works', 'POST', data));
 }
 
@@ -375,17 +373,17 @@ const triggerModalBack = () => {
 }
 
 const displayWorksModal = async () => {
+    document.querySelector('.modalGallery').innerHTML = '';
 
     const works = await generateWorks();
 
-    document.querySelector('.modalGallery').innerHTML = '';
     const gallery = document.querySelector('.modalGallery');
     for (let work of works) {
         gallery.appendChild(generateWorkModal(work));
         const workTrash = document.querySelector(`#workTrash_${work.id}`);
-        workTrash.addEventListener('click', () => {
-            deleteModalGalleryItem(work.id);
-            updateModal();
+        workTrash.addEventListener('click', async () => {
+            await deleteModalGalleryItem(work.id);
+            updateModal()
             displayWorksInMainGallery();
         });
     }
@@ -404,11 +402,6 @@ const generateWorkModal = (work) => {
     workElementFigurediv.classList.add('modalImgContainer');
     workDeleteIcon.classList.add('fa-regular', 'fa-trash-can', 'modalImgTrash');
     workDeleteIcon.setAttribute('id', `workTrash_${work.id}`);
-    // workDeleteIcon.onclick = () => {
-    //     deleteModalGalleryItem(work.id);
-    //     updateModal();
-    //     displayWorksInMainGallery();
-    // }
     captionWork.classList.add('modalFigcaption');
     workElementFigureImg.src = work.imageUrl;
     workElementFigureImg.crossOrigin = "anonymous";
@@ -428,23 +421,6 @@ const deleteModalGalleryItem = async (workId) => {
     workElement.remove();
 
     utils.deleteWorkFromDB(workId);
-
-    // try {
-    //     const reponse = await utils.deleteWorkFromDB(workId);
-    //     console.log(reponse);
-
-    //     if (!reponse.ok){ 
-    //         console.log(reponse.json())
-    //         throw new Error(reponse.status);
-    // }
-    //     else {
-    //         console.log('oeuvre supprimée');
-    //     }
-    // }
-    // catch (error) {
-    //     console.log(error);
-    //     alert('Erreur lors de la suppression de l\'oeuvre');
-    // }
 }
 
 
@@ -578,9 +554,9 @@ const generateWork = (work) => {
 }
 
 const displayWorksInMainGallery = async (categoryId) => {
+    document.querySelector('.gallery').innerHTML = '';
     const works = await generateWorks(categoryId);
     console.warn(works);
-    document.querySelector('.gallery').innerHTML = '';
     const gallery = document.querySelector('.gallery');
     for (let work of works) {
         gallery.appendChild(generateWork(work));
@@ -596,16 +572,12 @@ const generateWorks = async (categoryId) => {
     return works;
 }
 
+const init = () => {
+    setters();
+    displayWorksInMainGallery();
+}
 
+// INIT CALL
 
-// //MAIN CALLS
-
-setters();
-displayWorksInMainGallery();
-// const cle = document;
-// cle.addEventListener('keyup', (e) => {
-//     if (e.key === 'Escape') {
-//         console.log('escape');
-//     }
-// });
+init();
 
