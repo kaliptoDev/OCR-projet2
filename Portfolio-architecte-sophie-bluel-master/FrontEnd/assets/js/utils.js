@@ -10,18 +10,6 @@ export const getStorage = () => {
     return JSON.parse(window.localStorage.getItem(STORAGE_KEY));
 }
 
-export const setSessionStorage = (data) => {
-    sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(data));
-}
-
-export const getSessionStorage = () => {
-    return JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY));
-}
-
-export const deleteSessionStorage = () => {
-    sessionStorage.removeItem(SESSION_STORAGE_KEY);
-}
-
 export const deleteStorage = () => {
     window.localStorage.removeItem(STORAGE_KEY);
 }
@@ -41,8 +29,6 @@ export const fetchAPIMultipart = async (url, method, payload) => {
     let headers = {}
     if (method === 'DELETE' || method === 'POST') {
         headers = {
-            'Content-Type': 'multipart/form-data;',
-            // 'accept': 'application/json',
             'Authorization': 'Bearer ' + getStorage().token
         };
     } else {
@@ -77,6 +63,10 @@ export const fetchAPI = async (url, method, payload) => {
         headers: headers,
         body: payload || null
     });
+    console.log(res);
+    if(method=== "DELETE"){
+        setTimeout(() => {return res}, 5000);
+    }
     return res;
 
 }
@@ -86,22 +76,18 @@ export const resetFooter = () => {
     document.querySelector('footer').style.bottom = '';
 }
 
-export const deleteAllWorksFromDB = () => {
+export const  deleteAllWorksFromDB = async () => {
     try {
-        const works = getSessionStorage();
-        works.forEach(work => {
-            const reponse = fetchAPI(`http://localhost:5678/api/works/${work.id}`, 'DELETE', null);
-            if (reponse.status === 200) {
-                console.log('work deleted');
-            } else if (reponse.status === 401) {
-                console.log('Unauthorized');
-                throw new Error('Unauthorized');
-            }
-            else if (reponse.status === 500) {
-                console.log('Unexepected behaviour');
-                throw new Error('Unexepected behaviour');
-            }
-        });
+        const reponse = await fetchAPI('http://localhost:5678/api/works', 'GET', null);
+        if (reponse.status === 200) {
+            const works = await reponse.json();
+            works.forEach(work =>{
+                
+                deleteWorkFromDB(work.id);
+            })
+        } else {
+            throw new Error('Une erreur est survenue, veuillez réessayer. Erreur: ' + reponse.status);
+        }
 
     } catch (error) {
         console.log(error);
@@ -109,17 +95,23 @@ export const deleteAllWorksFromDB = () => {
     }
 }
 
-// export const updateAllWorksToDB = () => {}
-
-export const generateId = () => {
-    const works = getSessionStorage();
-    let id = 0;
-    works.forEach(work => {
-        if (work.id > id) {
-            id = work.id;
+export const deleteWorkFromDB = async (id) => {
+    try {
+        const reponse = await fetchAPI(`http://localhost:5678/api/works/${id}`, 'DELETE');
+        if (reponse.status === 200) {
+            console.log('work deleted');
+        } else if (reponse.status === 401) {
+            console.log('Unauthorized');
+            throw new Error('Unauthorized');
         }
-    });
-    id++;
-    return id;
+        else if (reponse.status === 500) {
+            console.log('Unexepected behaviour');
+            throw new Error('Unexepected behaviour');
+        }
+    } catch (error) {
+        console.log(error);
+        alert('Une erreur est survenue, veuillez réessayer. Erreur: ' + error);
+    }
+    
 }
 
