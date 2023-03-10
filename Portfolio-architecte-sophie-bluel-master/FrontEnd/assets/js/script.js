@@ -2,11 +2,6 @@
 import * as utils from './index.js'
 import { fetchAPIMultipart } from './index.js';
 
-/**
- * @param {object} work 
- * @description fetches the works details from the API
-*/
-
 const setters = () => {
     triggers();
     updateAdminBar();
@@ -36,7 +31,6 @@ const triggerFilter = () => {
 const triggerNavContact = () => {
     const contactTrigger = document.querySelector('.contact');
     contactTrigger.addEventListener('click', function () {
-        console.log('contact');
         navUpdate('400', '400', '600', 'none', true)
         document.querySelector('#contact').scrollIntoView({ behavior: 'smooth' }, true);
         utils.resetFooter();
@@ -52,7 +46,6 @@ const triggerNavLogin = () => {
 const triggerNavWork = () => {
     const backToWorks = document.querySelector('.worksGallery');
     backToWorks.addEventListener('click', () => {
-        console.log('works');
         navUpdate('600', '400', '400', 'none', true)
         utils.resetFooter();
     });
@@ -82,7 +75,6 @@ const triggerGalleryDeletion = () => {
 const applyChangesAdminBarTrigger = () => {
     const adminBar = document.querySelector('.publishChanges');
     adminBar.addEventListener('click', () => {
-        console.log("changes applied");
     })
 }
 
@@ -251,7 +243,6 @@ const triggerModalConfirmNewWork = async () => {
 
 const pushWorkIntoDB = async () => {
     const file = document.querySelector('.addPhotoInput').files[0];
-    console.log(file)
     const data = new FormData();
     const category = document.querySelector('.selectedOption').innerText;
     let categoryId = 0;
@@ -266,7 +257,7 @@ const pushWorkIntoDB = async () => {
     data.append('image', file);
     data.append('category', categoryId);
 
-    console.log(await fetchAPIMultipart('http://localhost:5678/api/works', 'POST', data));
+    await fetchAPIMultipart('http://localhost:5678/api/works', 'POST', data)
 }
 
 const generateAndDisplayNewWorkModal = () => {
@@ -281,6 +272,7 @@ const generateAndDisplayNewWorkModal = () => {
     const label = document.createElement('label');
     const input2 = document.createElement('div');
     input2.classList.add('selectContainer');
+
     input2.innerHTML = `
     <div class="label categoryLabel">Catégorie</div>
 				<div class="select">
@@ -292,9 +284,6 @@ const generateAndDisplayNewWorkModal = () => {
 					</div>
 				</div>
                 `
-
-
-
 
     section.setAttribute('isGallery', 'false');
     section.appendChild(addPhotoSection);
@@ -363,8 +352,6 @@ const changeModalButtons = () => {
     modalDeleteGallery.style.display = 'none';
     const modalConfirmNewWork = document.querySelector('.modalConfirmNewPhotoButton');
     modalConfirmNewWork.style.display = 'block';
-    console.warn("modalConfirmNewWork");
-
 }
 
 const triggerModalBack = () => {
@@ -472,9 +459,7 @@ const loggedInDetection = () => {
         document.querySelector('.login').innerText = 'logout';
         navUpdate('600', '400', '400', 'none', true)
         const userId = utils.getStorage(utils.STORAGE_KEY).userId;
-        console.log(`user Id = ${userId}`);
         const token = utils.getStorage(utils.STORAGE_KEY).token;
-        console.log(`token = ${token}`);
         hideFilters();
 
     } else {
@@ -517,12 +502,11 @@ const fetchWorks = async (workId) => {
         if (workId > 0) {
             return data.filter(work => work.categoryId === workId);
         }
-        else {
-            return data;
-        }
+        return data;
+
     }
     catch (error) {
-        console.log(error);
+        console.warn(error);
         alert('Erreur lors du chargement des oeuvres');
         return null;
     }
@@ -556,7 +540,6 @@ const generateWork = (work) => {
 const displayWorksInMainGallery = async (categoryId) => {
     document.querySelector('.gallery').innerHTML = '';
     const works = await generateWorks(categoryId);
-    console.warn(works);
     const gallery = document.querySelector('.gallery');
     for (let work of works) {
         gallery.appendChild(generateWork(work));

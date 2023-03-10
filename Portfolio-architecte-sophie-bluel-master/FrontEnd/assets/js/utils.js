@@ -1,17 +1,14 @@
 export const STORAGE_KEY = "user_token"
-export const SESSION_STORAGE_KEY = "temp_works"
-
-
 
 export const setStorage = (data) => {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 export const getStorage = () => {
-    return JSON.parse(window.localStorage.getItem(STORAGE_KEY));
+    return JSON.parse(window.sessionStorage.getItem(STORAGE_KEY));
 }
 
 export const deleteStorage = () => {
-    window.localStorage.removeItem(STORAGE_KEY);
+    window.sessionStorage.removeItem(STORAGE_KEY);
 }
 
 export const createUserJson = (email, password) => {
@@ -63,7 +60,6 @@ export const fetchAPI = async (url, method, payload) => {
         headers: headers,
         body: payload || null
     });
-    console.log(res);
     if(method=== "DELETE"){
         setTimeout(() => {return res}, 5000);
     }
@@ -90,7 +86,7 @@ export const  deleteAllWorksFromDB = async () => {
         }
 
     } catch (error) {
-        console.log(error);
+        console.warn(error);
         alert('Une erreur est survenue, veuillez réessayer. Erreur: ' + error);
     }
 }
@@ -99,17 +95,16 @@ export const deleteWorkFromDB = async (id) => {
     try {
         const reponse = await fetchAPI(`http://localhost:5678/api/works/${id}`, 'DELETE');
         if (reponse.status === 200) {
-            console.log('work deleted');
         } else if (reponse.status === 401) {
-            console.log('Unauthorized');
+            console.warn('Unauthorized');
             throw new Error('Unauthorized');
         }
         else if (reponse.status === 500) {
-            console.log('Unexepected behaviour');
+            console.warn('Unexepected behaviour');
             throw new Error('Unexepected behaviour');
         }
     } catch (error) {
-        console.log(error);
+        console.warn(error);
         alert('Une erreur est survenue, veuillez réessayer. Erreur: ' + error);
     }
     
